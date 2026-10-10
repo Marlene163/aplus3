@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>À plus ! 3 Vokabelpfad</title>
-<meta name="description" content="Vokabeltrainer für À plus ! 3, Unité 1 Volet 1">
+<meta name="description" content="Vokabeltrainer für À plus ! 3">
 <meta name="theme-color" content="#58cc02">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -109,7 +109,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
   position: relative; z-index: 1;
   background: var(--paper); border: 2px solid var(--line); border-radius: 999px;
   padding: 5px 16px; font-weight: 800; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted);
-  margin-top: 6px;
+  margin-top: 6px; max-width: 100%; text-align: center;
 }
 .row { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 12px; transform: translateX(calc(var(--k, 0) * var(--amp))); }
 .node {
@@ -244,7 +244,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
   <section id="home" class="screen">
     <header class="topbar">
       <img id="top-mascot" alt="" width="38" height="38">
-      <div class="title">À plus ! 3<small>Unité 1 · Volet 1</small></div>
+      <div class="title">À plus ! 3<small>Vokabelpfad</small></div>
       <span class="chip" title="Streak in Tagen">🔥 <span id="streak-count">0</span> <span class="unit" id="streak-unit">Tage</span></span>
       <span class="chip" title="Diamanten">💎 <span id="gem-count">0</span></span>
     </header>
@@ -294,7 +294,8 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
 (function () {
   "use strict";
 
-  /* ================= Daten: À plus ! 3, Unité 1, Volet 1 ================= */
+  /* ================= Daten: À plus ! 3 ================= */
+  // Die ersten 42 Wörter (Unité 1, Volet 1) stammen aus dem Buch-Scan, alle weiteren aus der Excel-Liste.
   // fr: Lernform · note: Zusatz aus dem Buch · de: Bedeutung · alt: weitere Schreibweisen, die die Spracherkennung liefern kann
   var VOCAB = [
     // Block 1
@@ -344,7 +345,325 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
     { fr: "indiquer qc", de: "etwas angeben" },
     { fr: "calculer qc", de: "etwas berechnen" },
     { fr: "la distance", de: "die Entfernung, die Distanz" },
-    { fr: "la glace", de: "das Eis" }
+    { fr: "la glace", de: "das Eis" },
+    // ab hier: Excel-Liste (say = Sprechform, alt = weitere akzeptierte gesprochene Formen)
+    {"fr": "autrefois", "de": "früher", "say": "autrefois"},
+    {"fr": "jamais", "de": "nie, niemals", "say": "jamais"},
+    {"fr": "le magasin", "de": "das Geschäft, der Laden", "say": "le magasin"},
+    {"fr": "rater quelqu'un / quelque chose", "de": "jemanden / etwas verpassen", "say": "rater"},
+    {"fr": "l'étudiant / l'étudiante", "de": "der Student / die Studentin", "say": "l'étudiant, l'étudiante"},
+    {"fr": "animé / animée", "de": "belebt", "say": "animé, animée"},
+    {"fr": "le monde", "de": "die Menschenmenge, die Welt", "say": "le monde"},
+    {"fr": "changer (de station)", "de": "umsteigen (Haltestelle)", "say": "changer de station", "alt": ["changer"]},
+    {"fr": "en direction de", "de": "in Richtung", "say": "en direction de"},
+    {"fr": "le loyer", "de": "die Miete", "say": "le loyer"},
+    {"fr": "avoir de la chance", "de": "Glück haben", "say": "avoir de la chance"},
+    {"fr": "se préparer", "de": "sich fertig machen / vorbereiten", "say": "se préparer"},
+    {"fr": "descendre (d'une station)", "de": "aussteigen", "say": "descendre"},
+    {"fr": "se coucher", "de": "sich hinlegen, schlafen gehen", "say": "se coucher"},
+    {"fr": "le resto", "note": "kurz für: le restaurant", "de": "das Restaurant", "say": "le resto", "alt": ["restaurant"]},
+    {"fr": "le ticket", "de": "die Fahrkarte, das Ticket", "say": "le ticket"},
+    {"fr": "sur soi", "de": "bei sich", "say": "sur soi"},
+    {"fr": "la sortie", "de": "der Ausgang", "say": "la sortie"},
+    {"fr": "l'arrondissement", "note": "m.", "de": "der Stadtbezirk (in Paris)", "say": "l'arrondissement"},
+    {"fr": "se sentir", "de": "sich fühlen", "say": "se sentir"},
+    {"fr": "prendre sa douche", "de": "duschen", "say": "prendre sa douche"},
+    {"fr": "s'habiller", "de": "sich anziehen", "say": "s'habiller"},
+    {"fr": "chaud / chaude", "de": "warm, heiß", "say": "chaud, chaude"},
+    {"fr": "dur / dure", "de": "hart, schwer", "say": "dur, dure"},
+    {"fr": "le projet", "de": "das Projekt, das Vorhaben", "say": "le projet"},
+    {"fr": "vraiment", "de": "wirklich", "say": "vraiment"},
+    {"fr": "la montée", "de": "der Aufstieg", "say": "la montée"},
+    {"fr": "faire un sac", "de": "einen Rucksack / eine Tasche packen", "say": "faire un sac"},
+    {"fr": "la pièce", "de": "das Stück, die Münze, das Zimmer", "say": "la pièce"},
+    {"fr": "métallique", "de": "metallisch, aus Metall", "say": "métallique"},
+    {"fr": "sentir", "de": "fühlen, riechen", "say": "sentir"},
+    {"fr": "grandir", "de": "wachsen, größer werden", "say": "grandir"},
+    {"fr": "l'étage", "note": "m.", "de": "das Stockwerk, die Etage", "say": "l'étage"},
+    {"fr": "la plate-forme", "de": "die Plattform", "say": "la plate-forme"},
+    {"fr": "l'ingénieur", "note": "m.", "de": "der Ingenieur", "say": "l'ingénieur"},
+    {"fr": "la pause", "de": "die Pause", "say": "la pause"},
+    {"fr": "construire quelque chose", "de": "etwas bauen / erbauen", "say": "construire"},
+    {"fr": "le mètre", "de": "der Meter", "say": "le mètre"},
+    {"fr": "tout le temps", "de": "die ganze Zeit, ständig", "say": "tout le temps"},
+    {"fr": "je crois que", "de": "ich glaube, dass", "say": "je crois que"},
+    {"fr": "haut / haute", "de": "hoch", "say": "haut, haute"},
+    {"fr": "dommage", "de": "schade", "say": "dommage"},
+    {"fr": "quelqu'un d'autre", "de": "jemand anderes", "say": "quelqu'un d'autre"},
+    {"fr": "le lendemain", "de": "der folgende Tag, am nächsten Tag", "say": "le lendemain"},
+    {"fr": "l'attraction", "note": "f.", "de": "die Attraktion", "say": "l'attraction"},
+    {"fr": "passer quelque chose", "de": "etwas verbringen / vorbeibringen", "say": "passer"},
+    {"fr": "fier / fière de quelqu'un / quelque chose", "de": "stolz auf jemanden / etwas", "say": "fier, fière"},
+    {"fr": "les uns les autres", "de": "einander, gegenseitig", "say": "les uns les autres"},
+    {"fr": "le message", "de": "die Nachricht, die Botschaft", "say": "le message"},
+    {"fr": "donner son avis", "de": "seine Meinung sagen", "say": "donner son avis"},
+    {"fr": "pour finir", "de": "zum Schluss", "say": "pour finir"},
+    {"fr": "s'agir de", "de": "es handelt sich um", "say": "s'agir de"},
+    {"fr": "donner envie de quelque chose à quelqu'un", "de": "jemandem Lust auf etwas machen", "say": "donner envie"},
+    {"fr": "avoir envie de", "de": "Lust haben zu / auf", "say": "avoir envie de"},
+    {"fr": "choisir quelque chose", "de": "etwas auswählen / wählen", "say": "choisir"},
+    {"fr": "avoir la patate", "de": "gut drauf sein, voller Energie sein", "say": "avoir la patate"},
+    {"fr": "la mélodie", "de": "die Melodie", "say": "la mélodie"},
+    {"fr": "la façon", "de": "die Art, die Weise", "say": "la façon"},
+    {"fr": "chanter (quelque chose)", "de": "etwas singen", "say": "chanter"},
+    {"fr": "réfléchir à quelqu'un / quelque chose", "de": "nachdenken über jemanden / etwas", "say": "réfléchir"},
+    {"fr": "les paroles", "note": "f. Plural", "de": "der Songtext, die Worte", "say": "les paroles"},
+    {"fr": "connaître quelqu'un / quelque chose", "de": "jemanden / etwas kennen", "say": "connaître"},
+    {"fr": "utiliser quelque chose", "de": "etwas benutzen / verwenden", "say": "utiliser"},
+    {"fr": "la présentation", "de": "die Präsentation, die Vorstellung", "say": "la présentation"},
+    {"fr": "présenter quelqu'un / quelque chose", "de": "jemanden / etwas vorstellen / präsentieren", "say": "présenter"},
+    {"fr": "apprendre quelque chose à quelqu'un", "de": "jemandem etwas beibringen / lehren", "say": "apprendre"},
+    {"fr": "au début de", "de": "am Anfang von", "say": "au début de"},
+    {"fr": "la Chandeleur", "de": "Lichtmess", "say": "la Chandeleur"},
+    {"fr": "la Saint-Valentin", "de": "Valentinstag", "say": "la Saint-Valentin"},
+    {"fr": "le mur des je t'aime", "de": "die Ich-liebe-dich-Mauer", "say": "le mur des je t'aime"},
+    {"fr": "la langue", "de": "die Sprache, die Zunge", "say": "la langue"},
+    {"fr": "la fleur", "de": "die Blume", "say": "la fleur"},
+    {"fr": "demander un effort", "de": "eine Anstrengung erfordern", "say": "demander un effort"},
+    {"fr": "s'éclater", "de": "viel Spaß haben, sich amüsieren", "say": "s'éclater"},
+    {"fr": "sérieux / sérieuse", "de": "ernst, ernsthaft", "say": "sérieux, sérieuse"},
+    {"fr": "je sais que", "de": "ich weiß, dass", "say": "je sais que"},
+    {"fr": "la confiance", "de": "das Vertrauen", "say": "la confiance"},
+    {"fr": "seulement", "de": "nur, lediglich", "say": "seulement"},
+    {"fr": "aller mal", "de": "sich schlecht fühlen, schlecht gehen", "say": "aller mal"},
+    {"fr": "la preuve", "de": "der Beweis", "say": "la preuve"},
+    {"fr": "se moquer de quelqu'un / quelque chose", "de": "sich über jemanden / etwas lustig machen", "say": "se moquer"},
+    {"fr": "habillé / habillée", "de": "gekleidet, angezogen", "say": "habillé, habillée"},
+    {"fr": "terriblement", "de": "furchtbar, schrecklich", "say": "terriblement"},
+    {"fr": "autrement", "de": "anders", "say": "autrement"},
+    {"fr": "prendre la défense de quelqu'un", "de": "jemanden verteidigen", "say": "prendre la défense"},
+    {"fr": "la défense", "de": "die Verteidigung", "say": "la défense"},
+    {"fr": "malheureusement", "de": "leider, unglücklicherweise", "say": "malheureusement"},
+    {"fr": "déranger quelqu'un", "de": "jemanden stören", "say": "déranger"},
+    {"fr": "blesser quelqu'un", "de": "jemanden verletzen", "say": "blesser"},
+    {"fr": "rapidement", "de": "schnell", "say": "rapidement"},
+    {"fr": "prendre ses distances", "de": "Abstand nehmen / halten", "say": "prendre ses distances"},
+    {"fr": "l'accident", "note": "m.", "de": "der Unfall", "say": "l'accident"},
+    {"fr": "le parapente", "de": "Paragliding, Gleitschirmfliegen", "say": "le parapente"},
+    {"fr": "handicapé / handicapée", "de": "behindert", "say": "handicapé, handicapée"},
+    {"fr": "s'engager", "de": "sich engagieren / einsetzen", "say": "s'engager"},
+    {"fr": "l'aide à domicile", "note": "f.", "de": "die Pflegekraft / Haushaltshilfe", "say": "l'aide à domicile"},
+    {"fr": "aider quelqu'un", "de": "jemandem helfen", "say": "aider"},
+    {"fr": "sortir de", "de": "herauskommen aus / verlassen", "say": "sortir de"},
+    {"fr": "la prison", "de": "das Gefängnis", "say": "la prison"},
+    {"fr": "apprendre à + inf.", "de": "lernen etwas zu tun", "say": "apprendre à"},
+    {"fr": "plaire à quelqu'un", "de": "jemandem gefallen", "say": "plaire"},
+    {"fr": "génial / géniale / géniaux", "de": "genial, toll", "say": "génial, géniale, géniaux"},
+    {"fr": "rire", "de": "lachen", "say": "rire"},
+    {"fr": "faire du bien à quelqu'un", "de": "jemandem gut tun", "say": "faire du bien"},
+    {"fr": "original / originale / originaux", "de": "originell", "say": "original, originale, originaux"},
+    {"fr": "naturel / naturelle", "de": "natürlich", "say": "naturel, naturelle"},
+    {"fr": "le rôle", "de": "die Rolle", "say": "le rôle"},
+    {"fr": "touchant / touchante", "de": "rührend, ergreifend", "say": "touchant, touchante"},
+    {"fr": "rêver de + inf.", "de": "träumen von", "say": "rêver de"},
+    {"fr": "ennuyeux / ennuyeuse", "de": "langweilig", "say": "ennuyeux, ennuyeuse"},
+    {"fr": "réaliste", "de": "realistisch", "say": "réaliste"},
+    {"fr": "normalement", "de": "normalerweise", "say": "normalement"},
+    {"fr": "s'intéresser à quelqu'un / quelque chose", "de": "sich für jemanden / etwas interessieren", "say": "s'intéresser"},
+    {"fr": "avoir pitié de quelqu'un", "de": "Mitleid mit jemandem haben", "say": "avoir pitié"},
+    {"fr": "le cliché", "de": "das Klischee", "say": "le cliché"},
+    {"fr": "la culture", "de": "die Kultur", "say": "la culture"},
+    {"fr": "classique", "de": "klassisch", "say": "classique"},
+    {"fr": "exagéré / exagérée", "de": "übertrieben", "say": "exagéré, exagérée"},
+    {"fr": "changer quelque chose", "de": "etwas verändern / ändern", "say": "changer"},
+    {"fr": "le thème", "de": "das Thema", "say": "le thème"},
+    {"fr": "l'auteur / l'auteure", "note": "m./f.", "de": "der Autor / die Autorin", "say": "l'auteur, l'auteure"},
+    {"fr": "le roman", "de": "der Roman", "say": "le roman"},
+    {"fr": "le roman policier", "de": "der Krimi, Kriminalroman", "say": "le roman policier"},
+    {"fr": "le résumé", "de": "die Inhaltsangabe, Zusammenfassung", "say": "le résumé"},
+    {"fr": "décrire quelqu'un / quelque chose", "de": "jemanden / etwas beschreiben", "say": "décrire"},
+    {"fr": "le personnage", "de": "die Figur, die Person (im Buch/Film)", "say": "le personnage"},
+    {"fr": "le narrateur / la narratrice", "de": "der Erzähler / die Erzählerin", "say": "le narrateur, la narratrice"},
+    {"fr": "s'identifier à quelqu'un", "de": "sich mit jemandem identifizieren", "say": "s'identifier"},
+    {"fr": "la tension", "de": "die Spannung", "say": "la tension"},
+    {"fr": "le pouvoir", "de": "die Macht, das Können", "say": "le pouvoir"},
+    {"fr": "le/la journaliste", "de": "der/die Journalist/in", "say": "le journaliste, la journaliste"},
+    {"fr": "le Québec", "de": "Quebec (Provinz / Stadt in Kanada)", "say": "le Québec"},
+    {"fr": "la Martinique", "de": "Martinique (Insel)", "say": "la Martinique"},
+    {"fr": "le hockey sur glace", "de": "Eishockey", "say": "le hockey sur glace"},
+    {"fr": "le symbole", "de": "das Symbol", "say": "le symbole"},
+    {"fr": "le défi", "de": "die Herausforderung", "say": "le défi"},
+    {"fr": "national / nationale", "de": "national", "say": "national, nationale"},
+    {"fr": "le drapeau / les drapeaux", "de": "die Flagge / die Flaggen", "say": "le drapeau, les drapeaux"},
+    {"fr": "le Canada", "de": "Kanada", "say": "le Canada"},
+    {"fr": "francophone", "de": "französischsprachig", "say": "francophone"},
+    {"fr": "la volonté", "de": "der Wille", "say": "la volonté"},
+    {"fr": "le pays", "de": "das Land", "say": "le pays"},
+    {"fr": "le paysage", "de": "die Landschaft", "say": "le paysage"},
+    {"fr": "décider de + inf.", "de": "beschließen etwas zu tun", "say": "décider de"},
+    {"fr": "l'été indien", "note": "m.", "de": "Altweibersommer (in Kanada)", "say": "l'été indien"},
+    {"fr": "la nourriture", "de": "die Nahrung, das Essen", "say": "la nourriture"},
+    {"fr": "agréable", "de": "angenehm", "say": "agréable"},
+    {"fr": "venir de quelque part", "de": "aus einem Land / Ort kommen", "say": "venir"},
+    {"fr": "la Chine", "de": "China", "say": "la Chine"},
+    {"fr": "le boulevard", "de": "der Boulevard, die breite Straße", "say": "le boulevard"},
+    {"fr": "la ville souterraine", "de": "die unterirdische Stadt", "say": "la ville souterraine"},
+    {"fr": "souterrain / souterraine", "de": "unterirdisch", "say": "souterrain, souterraine"},
+    {"fr": "le navigateur / la navigatrice", "de": "der/die Seefahrer/in, Navigator/in", "say": "le navigateur, la navigatrice"},
+    {"fr": "les États-Unis", "note": "m. Plural", "de": "die Vereinigten Staaten, USA", "say": "les États-Unis"},
+    {"fr": "le Saint-Laurent", "de": "der Sankt-Lorenz-Strom", "say": "le Saint-Laurent"},
+    {"fr": "coloniser quelqu'un / quelque chose", "de": "jemanden / etwas kolonisieren", "say": "coloniser"},
+    {"fr": "le climat", "de": "das Klima", "say": "le climat"},
+    {"fr": "la guerre", "de": "der Krieg", "say": "la guerre"},
+    {"fr": "officiel / officielle", "de": "offiziell", "say": "officiel, officielle"},
+    {"fr": "le découvreur / la découvreuse", "de": "der/die Entdecker/in", "say": "le découvreur, la découvreuse"},
+    {"fr": "fonder quelque chose", "de": "etwas gründen", "say": "fonder"},
+    {"fr": "le traîneau / les traîneaux", "de": "der Schlitten / die Schlitten", "say": "le traîneau, les traîneaux"},
+    {"fr": "la forêt", "de": "der Wald", "say": "la forêt"},
+    {"fr": "neiger", "de": "schneien", "say": "neiger"},
+    {"fr": "la neige", "de": "der Schnee", "say": "la neige"},
+    {"fr": "le degré", "de": "das Grad", "say": "le degré"},
+    {"fr": "le gîte", "de": "die Herberge, das Gästehaus", "say": "le gîte"},
+    {"fr": "la poutine", "de": "Poutine (kanadische Spezialität mit Pommes, Käse und Soße)", "say": "la poutine"},
+    {"fr": "le sirop d'érable", "de": "Ahornsirup", "say": "le sirop d'érable"},
+    {"fr": "spécial / spéciale / spéciaux", "de": "besonders, spezial", "say": "spécial, spéciale, spéciaux"},
+    {"fr": "le caribou", "de": "das Karibu (Rentier)", "say": "le caribou"},
+    {"fr": "se présenter", "de": "sich vorstellen", "say": "se présenter"},
+    {"fr": "le menu", "de": "die Speisekarte, das Menü", "say": "le menu"},
+    {"fr": "le carnaval", "de": "der Karneval, der Fasching", "say": "le carnaval"},
+    {"fr": "se déplacer", "de": "sich fortbewegen / reisen", "say": "se déplacer"},
+    {"fr": "la motoneige", "de": "das Schneemobil", "say": "la motoneige"},
+    {"fr": "le produit", "de": "das Produkt", "say": "le produit"},
+    {"fr": "autant de", "de": "so viel / so viele", "say": "autant de"},
+    {"fr": "la séduction", "de": "die Verführung", "say": "la séduction"},
+    {"fr": "étranger / étrangère", "de": "fremd, ausländisch", "say": "étranger, étrangère"},
+    {"fr": "le plus souvent", "de": "meistens, am häufigsten", "say": "le plus souvent"},
+    {"fr": "la pêche", "de": "das Fischen, der Fischfang", "say": "la pêche"},
+    {"fr": "tous les deux / toutes les deux", "de": "alle beide, beide", "say": "tous les deux, toutes les deux"},
+    {"fr": "l'usine", "note": "f.", "de": "die Fabrik", "say": "l'usine"},
+    {"fr": "la recherche", "de": "die Forschung, die Suche", "say": "la recherche"},
+    {"fr": "la baleine", "de": "der Wal", "say": "la baleine"},
+    {"fr": "le ski de fond", "de": "Langlauf (Skisport)", "say": "le ski de fond"},
+    {"fr": "l'anorak", "note": "m.", "de": "der Anorak, die Windjacke", "say": "l'anorak"},
+    {"fr": "le tourisme", "de": "der Tourismus", "say": "le tourisme"},
+    {"fr": "faire des études", "de": "studieren, eine Ausbildung machen", "say": "faire des études"},
+    {"fr": "les études", "note": "f. Plural", "de": "das Studium, die Ausbildung", "say": "les études"},
+    {"fr": "protéger quelqu'un / quelque chose", "de": "jemanden / etwas beschützen / schützen", "say": "protéger"},
+    {"fr": "immédiatement", "de": "sofort, sogleich", "say": "immédiatement"},
+    {"fr": "pour cent", "de": "Prozent", "say": "pour cent"},
+    {"fr": "sanctionner quelqu'un / quelque chose", "de": "jemanden / etwas bestrafen / sanktionieren", "say": "sanctionner"},
+    {"fr": "le règlement", "de": "die Ordnung, die Vorschrift", "say": "le règlement"},
+    {"fr": "valable", "de": "gültig", "say": "valable"},
+    {"fr": "la rentrée scolaire", "de": "der Schulbeginn (nach den Sommerferien)", "say": "la rentrée scolaire"},
+    {"fr": "le mari", "de": "der Ehemann", "say": "le mari"},
+    {"fr": "le calendrier", "de": "der Kalender", "say": "le calendrier"},
+    {"fr": "le courage", "de": "der Mut", "say": "le courage"},
+    {"fr": "évidemment", "de": "natürlich, selbstverständlich", "say": "évidemment"},
+    {"fr": "l'adolescent / l'adolescente", "note": "m./f.", "de": "der/die Jugendliche, der Teenager", "say": "l'adolescent, l'adolescente"},
+    {"fr": "fréquemment", "de": "häufig, oft", "say": "fréquemment"},
+    {"fr": "pourtant", "de": "dennoch, trotzdem", "say": "pourtant"},
+    {"fr": "évident / évidente", "de": "offensichtlich, klar", "say": "évident, évidente"},
+    {"fr": "absolument", "de": "absolut, vollkommen", "say": "absolument"},
+    {"fr": "directement", "de": "direkt", "say": "directement"},
+    {"fr": "allumer", "de": "einschalten, anmachen", "say": "allumer"},
+    {"fr": "le sentiment", "de": "das Gefühl", "say": "le sentiment"},
+    {"fr": "méchamment", "de": "boshaft, gemein", "say": "méchamment"},
+    {"fr": "reprendre", "de": "wieder aufnehmen, fortsetzen", "say": "reprendre"},
+    {"fr": "l'expérience", "note": "f.", "de": "die Erfahrung, das Experiment", "say": "l'expérience"},
+    {"fr": "exprimer quelque chose", "de": "etwas ausdrücken", "say": "exprimer"},
+    {"fr": "professionnel / professionnelle", "de": "beruflich, professionell", "say": "professionnel, professionnelle"},
+    {"fr": "l'avocat / l'avocate", "note": "m./f.", "de": "der/die Rechtsanwalt/in", "say": "l'avocat, l'avocate"},
+    {"fr": "méchant / méchante", "de": "böse, gemein", "say": "méchant, méchante"},
+    {"fr": "finalement", "de": "schließlich, am Ende", "say": "finalement"},
+    {"fr": "strict / stricte", "de": "streng, strikt", "say": "strict, stricte"},
+    {"fr": "forcément", "de": "zwangsläufig, unbedingt", "say": "forcément"},
+    {"fr": "gentiment", "de": "freundlich, nett", "say": "gentiment"},
+    {"fr": "permettre quelque chose à quelqu'un", "de": "jemandem etwas erlauben / gestatten", "say": "permettre"},
+    {"fr": "se disputer avec quelqu'un", "de": "sich mit jemandem streiten", "say": "se disputer"},
+    {"fr": "faire la cuisine", "de": "kochen", "say": "faire la cuisine"},
+    {"fr": "le lave-vaisselle", "de": "die Spülmaschine", "say": "le lave-vaisselle"},
+    {"fr": "le lave-linge", "de": "die Waschmaschine", "say": "le lave-linge"},
+    {"fr": "mettre le couvert", "de": "den Tisch decken", "say": "mettre le couvert"},
+    {"fr": "ranger quelque chose", "de": "etwas aufräumen", "say": "ranger"},
+    {"fr": "les tâches ménagères", "note": "f. Plural", "de": "die Haushaltstätigkeiten, die Hausarbeit", "say": "les tâches ménagères"},
+    {"fr": "le couvert", "de": "das Besteck", "say": "le couvert"},
+    {"fr": "l'ascenseur", "note": "m.", "de": "der Aufzug, der Fahrstuhl", "say": "l'ascenseur"},
+    {"fr": "compliqué / compliquée", "de": "kompliziert", "say": "compliqué, compliquée"},
+    {"fr": "de temps en temps", "de": "ab und zu, von Zeit zu Zeit", "say": "de temps en temps"},
+    {"fr": "descendre les poubelles", "de": "den Müll hinuntertragen", "say": "descendre les poubelles"},
+    {"fr": "la femme de ménage", "de": "die Putzfrau, die Reinigungskraft", "say": "la femme de ménage"},
+    {"fr": "le reste", "de": "der Rest", "say": "le reste"},
+    {"fr": "la poubelle", "de": "der Mülleimer", "say": "la poubelle"},
+    {"fr": "s'organiser", "de": "sich organisieren", "say": "s'organiser"},
+    {"fr": "essuyer quelque chose", "de": "etwas abtrocknen / abwischen", "say": "essuyer"},
+    {"fr": "sortir le chien", "de": "den Hund ausführen / Gassi gehen", "say": "sortir le chien"},
+    {"fr": "avoir besoin de quelqu'un / quelque chose", "de": "jemanden / etwas brauchen", "say": "avoir besoin"},
+    {"fr": "être égal à quelqu'un", "de": "jemandem egal sein", "say": "être égal"},
+    {"fr": "avoir le droit de + inf.", "de": "das Recht haben zu / dürfen", "say": "avoir le droit de"},
+    {"fr": "en ligne", "de": "online", "say": "en ligne"},
+    {"fr": "espionner quelqu'un / quelque chose", "de": "jemanden / etwas ausspionieren", "say": "espionner"},
+    {"fr": "bien sûr que oui / non", "de": "natürlich (nicht)", "say": "bien sûr que oui, bien sûr que non", "alt": ["bien sûr"]},
+    {"fr": "le profil", "de": "das Profil", "say": "le profil"},
+    {"fr": "dégoûtant / dégoûtante", "de": "ekelhaft, scheußlich", "say": "dégoûtant, dégoûtante"},
+    {"fr": "interdire quelque chose à quelqu'un", "de": "jemandem etwas verbieten", "say": "interdire"},
+    {"fr": "le mot de passe", "de": "das Passwort", "say": "le mot de passe"},
+    {"fr": "respecter quelqu'un / quelque chose", "de": "jemanden / etwas respektieren", "say": "respecter"},
+    {"fr": "remarquer quelqu'un / quelque chose", "de": "jemanden / etwas bemerken / feststellen", "say": "remarquer"},
+    {"fr": "le doute", "de": "der Zweifel", "say": "le doute"},
+    {"fr": "privé / privée", "de": "privat", "say": "privé, privée"},
+    {"fr": "faire confiance à quelqu'un", "de": "jemandem vertrauen", "say": "faire confiance"},
+    {"fr": "dire ses quatre vérités à quelqu'un", "de": "jemandem die Meinung sagen", "say": "dire ses quatre vérités"},
+    {"fr": "la vérité", "de": "die Wahrheit", "say": "la vérité"},
+    {"fr": "penser bien / mal", "de": "gut / schlecht denken", "say": "penser bien, penser mal", "alt": ["penser"]},
+    {"fr": "la France métropolitaine", "de": "das französische Mutterland (Kontinent)", "say": "la France métropolitaine"},
+    {"fr": "outre-mer", "de": "Übersee-", "say": "outre-mer"},
+    {"fr": "le pêcheur / la pêcheuse", "de": "der Fischer / die Fischerin", "say": "le pêcheur, la pêcheuse"},
+    {"fr": "N'importe quoi !", "de": "So ein Quatsch! / Unsinn!", "say": "n'importe quoi"},
+    {"fr": "mentir", "de": "lügen", "say": "mentir"},
+    {"fr": "cultiver quelque chose", "de": "etwas anbauen / kultivieren", "say": "cultiver"},
+    {"fr": "la lavande", "de": "der Lavendel", "say": "la lavande"},
+    {"fr": "la plongée", "de": "das Tauchen (Sportart)", "say": "la plongée"},
+    {"fr": "littoral / littorale", "de": "Küsten-", "say": "littoral, littorale"},
+    {"fr": "le chamois", "de": "die Gemse", "say": "le chamois"},
+    {"fr": "alpin / alpine", "de": "alpin, Alpen-", "say": "alpin, alpine"},
+    {"fr": "le rocher", "de": "der Felsen", "say": "le rocher"},
+    {"fr": "la solitude", "de": "die Einsamkeit", "say": "la solitude"},
+    {"fr": "le bouquetin", "de": "der Steinbock", "say": "le bouquetin"},
+    {"fr": "les Alpes", "note": "f. Plural", "de": "die Alpen", "say": "les Alpes"},
+    {"fr": "augmenter", "de": "steigen, ansteigen, erhöhen", "say": "augmenter"},
+    {"fr": "préserver quelque chose", "de": "etwas bewahren / schützen", "say": "préserver"},
+    {"fr": "la biodiversité", "de": "die Artenvielfalt, Biodiversität", "say": "la biodiversité"},
+    {"fr": "parmi", "de": "unter, mitten unter", "say": "parmi"},
+    {"fr": "la merveille", "de": "das Wunder", "say": "la merveille"},
+    {"fr": "la soirée", "de": "der Abend, der Abendverlauf", "say": "la soirée"},
+    {"fr": "magnifique", "de": "wunderschön, herrlich", "say": "magnifique"},
+    {"fr": "la campagne", "de": "das Land (im Gegensatz zur Stadt)", "say": "la campagne"},
+    {"fr": "l'équitation", "note": "f.", "de": "das Reiten (Sportart)", "say": "l'équitation"},
+    {"fr": "la voile", "de": "das Segeln (Sportart)", "say": "la voile"},
+    {"fr": "le paradis", "de": "das Paradies", "say": "le paradis"},
+    {"fr": "inventer quelque chose", "de": "etwas erfinden", "say": "inventer"},
+    {"fr": "le sable", "de": "der Sand", "say": "le sable"},
+    {"fr": "la découverte", "de": "die Entdeckung", "say": "la découverte"},
+    {"fr": "mourir de faim", "de": "vor Hunger sterben", "say": "mourir de faim"},
+    {"fr": "mourir de soif", "de": "vor Durst sterben", "say": "mourir de soif"},
+    {"fr": "mourir de rire", "de": "sich totlachen", "say": "mourir de rire"},
+    {"fr": "s'inscrire à quelque chose", "de": "sich anmelden für / zu etwas", "say": "s'inscrire"},
+    {"fr": "faire plaisir à quelqu'un", "de": "jemandem eine Freude machen", "say": "faire plaisir"},
+    {"fr": "certain / certaine", "de": "bestimmter / bestimmte, sicher", "say": "certain, certaine"},
+    {"fr": "se marier avec quelqu'un", "de": "jemanden heiraten", "say": "se marier"},
+    {"fr": "persuader quelqu'un de faire quelque chose", "de": "jemanden überreden / überzeugen etwas zu tun", "say": "persuader"},
+    {"fr": "tenir le coup", "de": "durchhalten", "say": "tenir le coup"},
+    {"fr": "tendre la main à quelqu'un", "de": "jemandem die Hand reichen / geben", "say": "tendre la main"},
+    {"fr": "le sourire", "de": "das Lächeln", "say": "le sourire"},
+    {"fr": "être dégoûté / dégoûtée", "de": "frustriert / angewidert sein", "say": "être dégoûté, dégoûtée"},
+    {"fr": "le parking", "de": "der Parkplatz", "say": "le parking"},
+    {"fr": "le séjour", "de": "der Aufenthalt", "say": "le séjour"},
+    {"fr": "être à l'aise", "de": "sich wohlfühlen", "say": "être à l'aise"},
+    {"fr": "le dîner", "de": "das Abendessen", "say": "le dîner"},
+    {"fr": "freiner", "de": "bremsen", "say": "freiner"},
+    {"fr": "prêter quelque chose à quelqu'un", "de": "jemandem etwas leihen", "say": "prêter"},
+    {"fr": "rouler", "de": "fahren (Fahrzeug)", "say": "rouler"},
+    {"fr": "être gêné / gênée", "de": "verlegen sein, sich genieren", "say": "être gêné, gênée"},
+    {"fr": "le mouchoir", "de": "das Taschentuch", "say": "le mouchoir"},
+    {"fr": "après-demain", "de": "übermorgen", "say": "après-demain"},
+    {"fr": "la carte postale", "de": "die Ansichtskarte, Postkarte", "say": "la carte postale"},
+    {"fr": "se cacher", "de": "sich verstecken", "say": "se cacher"},
+    {"fr": "quitter quelqu'un / quelque chose", "de": "jemanden / etwas verlassen", "say": "quitter"},
+    {"fr": "s'allonger", "de": "sich hinlegen", "say": "s'allonger"},
+    {"fr": "le médecin", "de": "der Arzt / die Ärztin", "say": "le médecin"},
+    {"fr": "le pansement", "de": "das Pflaster, der Verband", "say": "le pansement"},
+    {"fr": "au bout d'un moment", "de": "nach einer Weile, nach einer Zeit", "say": "au bout d'un moment"},
+    {"fr": "prendre des notes", "de": "Notizen machen", "say": "prendre des notes"}
   ];
 
   // Lückentexte: s = Satz mit ~ als Lücke, a = Lösung, o = falsche Auswahl, de = Übersetzung, form = Grammatikfrage
@@ -396,7 +715,325 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
     { s: "Est-ce que vous pouvez m'~ le chemin pour aller à la gare, s'il vous plaît ?", a: "indiquer", o: ["indiquez", "indiqué", "indique"], de: "Können Sie mir bitte den Weg zum Bahnhof zeigen?", form: true },
     { s: "En cours de maths, les élèves ~.", a: "calculent", o: ["calcule", "calculez", "calculer"], de: "Im Matheunterricht rechnen die Schüler.", form: true },
     { s: "La ~ entre Paris et Strasbourg est plus petite que la ~ entre Paris et Montpellier.", a: "distance", o: ["flèche", "glace", "moitié"], de: "Die Entfernung zwischen Paris und Straßburg ist kleiner als die zwischen Paris und Montpellier." },
-    { s: "En été, j'adore manger une ~ au chocolat.", a: "glace", o: ["flèche", "distance", "façade"], de: "Im Sommer esse ich gern ein Schokoladeneis." }
+    { s: "En été, j'adore manger une ~ au chocolat.", a: "glace", o: ["flèche", "distance", "façade"], de: "Im Sommer esse ich gern ein Schokoladeneis." },
+    // ab hier: Beispielsätze aus der Excel-Liste
+    {"s": "~, il y avait ici un parc.", "a": "Autrefois", "o": ["Jamais", "Demain", "Après-demain"]},
+    {"s": "Je ne suis ~ allé à Paris.", "a": "jamais", "o": ["autrefois", "avant", "uniquement"]},
+    {"s": "J'achète des fruits au ~.", "a": "magasin", "o": ["boutique", "façade", "plante"]},
+    {"s": "J'ai ~ mon bus ce matin.", "a": "raté", "o": ["rater", "ratez", "rate"]},
+    {"s": "Les ~ vont à l'université.", "a": "étudiants", "o": ["étudiant", "étudiante", "étudier"]},
+    {"s": "Mon quartier est très ~.", "a": "animé", "o": ["animée", "animés", "animer"]},
+    {"s": "Il y a beaucoup de ~ dans la rue.", "a": "monde", "o": ["loyer", "fleuve", "palais"]},
+    {"s": "Il faut ~ de station à Châtelet.", "a": "changer", "o": ["change", "changé", "changez"]},
+    {"s": "Le métro va en ~ de Porte de Clignancourt.", "a": "direction", "o": ["ticket", "loyer", "projet"]},
+    {"s": "Le ~ de notre appartement est très cher.", "a": "loyer", "o": ["ticket", "monde", "mètre"]},
+    {"s": "J'ai eu de la ~ aujourd'hui !", "a": "chance", "o": ["sortie", "pause", "douche"]},
+    {"s": "Je ~ pour aller au travail.", "a": "me prépare", "o": ["se prépare", "me préparer", "te prépares"]},
+    {"s": "Il faut ~ à la prochaine station.", "a": "descendre", "o": ["descend", "descendu", "descendez"]},
+    {"s": "Je suis fatigué, je vais ~.", "a": "me coucher", "o": ["se coucher", "me couche", "te coucher"]},
+    {"s": "Ce soir, on va au ~.", "a": "resto", "o": ["sortie", "douche", "pièce"]},
+    {"s": "N'oublie pas d'acheter un ~ de métro.", "a": "ticket", "o": ["sortie", "station", "direction"]},
+    {"s": "Tu as de l'argent ~ ?", "a": "sur toi", "o": ["sur soi", "sur tu", "sur te"]},
+    {"s": "La ~ du métro est à droite.", "a": "sortie", "o": ["ticket", "loyer", "resto"]},
+    {"s": "Paris a vingt ~.", "a": "arrondissements", "o": ["arrondissement", "loyers", "mondes"]},
+    {"s": "Je ~ très bien ici.", "a": "me sens", "o": ["me sent", "se sent", "me sentir"]},
+    {"s": "Le matin, je ~.", "a": "prends ma douche", "o": ["prend ma douche", "prends sa douche", "prendre ma douche"]},
+    {"s": "Elle ~ pour sortir.", "a": "s'habille", "o": ["s'habilles", "m'habille", "s'habiller"]},
+    {"s": "Je bois un chocolat ~.", "a": "chaud", "o": ["chaude", "chauds", "chaudes"]},
+    {"s": "L'exercice de maths est très ~.", "a": "dur", "o": ["dure", "durs", "dures"]},
+    {"s": "J'ai beaucoup de ~ pour ce week-end.", "a": "projets", "o": ["projet", "loyers", "arrondissements"]},
+    {"s": "C'est ~ une belle journée.", "a": "vraiment", "o": ["vrai", "vraie", "autrefois"]},
+    {"s": "La ~ de la montagne est difficile.", "a": "montée", "o": ["monter", "monté", "projet"]},
+    {"s": "Je ~ pour le voyage.", "a": "fais mon sac", "o": ["fait mon sac", "faire mon sac", "fais ma sac"]},
+    {"s": "Pour construire cette étagère, il faut cette ~.", "a": "pièce", "o": ["projet", "étage", "mètre"]},
+    {"s": "Un pont en fer est un pont ~.", "a": "métallique", "o": ["chaud", "animé", "végétal"]},
+    {"s": "Je ~ le parfum des fleurs.", "a": "sens", "o": ["sent", "sentez", "sentir"]},
+    {"s": "Les enfants ~ vite.", "a": "grandissent", "o": ["grandit", "grandissez", "grandir"]},
+    {"s": "Mon appartement est au premier ~.", "a": "étage", "o": ["pièce", "montée", "sortie"]},
+    {"s": "La ~ de la tour Eiffel est haute.", "a": "plate-forme", "o": ["étage", "mètre", "ingénieur"]},
+    {"s": "Gustave Eiffel était un ~ célèbre.", "a": "ingénieur", "o": ["étage", "mètre", "projet"]},
+    {"s": "Je suis fatigué, je vais faire une ~.", "a": "pause", "o": ["mètre", "étage", "projet"]},
+    {"s": "Qui a ~ la tour Eiffel ?", "a": "construit", "o": ["construire", "construis", "construisent"]},
+    {"s": "Il court 100 ~ en une minute.", "a": "mètres", "o": ["mètre", "étages", "pauses"]},
+    {"s": "Mon frère parle ~.", "a": "tout le temps", "o": ["tous le temps", "tout les temps", "toute le temps"]},
+    {"s": "Je ~ que ça va aller.", "a": "crois", "o": ["croit", "croire", "croyez"]},
+    {"s": "La cathédrale est très ~.", "a": "haute", "o": ["haut", "hauts", "hautes"]},
+    {"s": "Tu ne viens pas ? Quel ~ !", "a": "dommage", "o": ["pause", "chance", "montée"]},
+    {"s": "Est-ce que ~ peut m'aider ?", "a": "quelqu'un d'autre", "o": ["quelqu'un autre", "quelque autre", "quelqu'un d'autres"]},
+    {"s": "Le ~, nous sommes partis tôt.", "a": "lendemain", "o": ["demain", "après-demain", "dommage"]},
+    {"s": "Le parc d'~ est super.", "a": "attractions", "o": ["ingénieurs", "étages", "arrondissements"]},
+    {"s": "J'ai ~ de très bonnes vacances.", "a": "passé", "o": ["passer", "passez", "passés"]},
+    {"s": "Sa mère est très ~ de ses résultats.", "a": "fière", "o": ["fier", "fiers", "fières"]},
+    {"s": "Ils s'aident ~.", "a": "les uns les autres", "o": ["l'un les autres", "les uns l'autres", "les unes l'autre"]},
+    {"s": "Quel est le ~ de cette chanson ?", "a": "message", "o": ["mélodie", "façon", "attraction"]},
+    {"s": "Après la présentation, tout le monde peut ~.", "a": "donner son avis", "o": ["donne son avis", "donner sa avis", "donner ses avis"]},
+    {"s": "~, je voudrais vous remercier.", "a": "Pour finir", "o": ["Pour fini", "Pour finit", "Par finir"]},
+    {"s": "Il ~ d'un problème important.", "a": "s'agit", "o": ["s'agir", "agit", "s'agis"]},
+    {"s": "Cette photo ~ de voyager.", "a": "donne envie", "o": ["donne avis", "donner envie", "donnes envie"]},
+    {"s": "J'ai ~ d'une glace.", "a": "envie", "o": ["avis", "façon", "message"]},
+    {"s": "Vous avez ~ votre menu ?", "a": "choisi", "o": ["choisir", "choisis", "choisissez"]},
+    {"s": "Ce matin, j'ai la ~ !", "a": "patate", "o": ["plate-forme", "façade", "montée"]},
+    {"s": "J'aime beaucoup la ~ de cette chanson.", "a": "mélodie", "o": ["message", "projet", "lendemain"]},
+    {"s": "J'aime ta ~ d'expliquer les choses.", "a": "façon", "o": ["message", "avis", "projet"]},
+    {"s": "Les oiseaux ~ le matin.", "a": "chantent", "o": ["chante", "chantez", "chanter"]},
+    {"s": "Je dois ~ à ta proposition.", "a": "réfléchir", "o": ["réfléchis", "réfléchi", "réfléchissez"]},
+    {"s": "Je ne comprends pas bien les ~.", "a": "paroles", "o": ["parole", "message", "mélodie"]},
+    {"s": "Tu ~ cette chanson ?", "a": "connais", "o": ["connaît", "connaissez", "connaître"]},
+    {"s": "Pour écrire, on peut ~ un stylo.", "a": "utiliser", "o": ["utilise", "utilisé", "utilisez"]},
+    {"s": "Sa ~ était très claire.", "a": "présentation", "o": ["message", "avis", "projet"]},
+    {"s": "Geoffrey va ~ les monuments de Paris.", "a": "présenter", "o": ["présente", "présenté", "présentez"]},
+    {"s": "Elle m'a ~ à cuisiner.", "a": "appris", "o": ["apprendre", "apprend", "apprends"]},
+    {"s": "~ du concert, le groupe a joué sa meilleure chanson.", "a": "Au début", "o": ["À le début", "Au débuter", "À la début"]},
+    {"s": "À la ~, on mange des crêpes.", "a": "Chandeleur", "o": ["Saint-Valentin", "Joconde", "Seine"]},
+    {"s": "Le 14 février, c'est la ~.", "a": "Saint-Valentin", "o": ["Chandeleur", "Joconde", "Martinique"]},
+    {"s": "Le mur des ~ est à Montmartre.", "a": "je t'aime", "o": ["je crois", "je sais", "je t'aide"]},
+    {"s": "Ils ne parlent pas la même ~.", "a": "langue", "o": ["fleur", "confiance", "message"]},
+    {"s": "Il m'a offert des ~.", "a": "fleurs", "o": ["fleur", "langues", "mètres"]},
+    {"s": "Cet exercice demande un ~.", "a": "effort", "o": ["preuve", "confiance", "langue"]},
+    {"s": "À la fête, tout le monde ~.", "a": "s'est éclaté", "o": ["s'est éclater", "a éclaté", "s'ont éclaté"]},
+    {"s": "Aude est une fille très ~.", "a": "sérieuse", "o": ["sérieux", "sérieuses", "sérieusement"]},
+    {"s": "Je ~ que ce n'est pas facile.", "a": "sais", "o": ["sait", "savez", "savoir"]},
+    {"s": "La ~ entre les parents et les enfants est importante.", "a": "confiance", "o": ["effort", "message", "projet"]},
+    {"s": "J'ai ~ deux euros sur moi.", "a": "seulement", "o": ["seul", "seule", "terriblement"]},
+    {"s": "Quand on est malade, on ~.", "a": "va mal", "o": ["vas mal", "aller mal", "vont mal"]},
+    {"s": "La police a trouvé des ~.", "a": "preuves", "o": ["preuve", "langues", "confiances"]},
+    {"s": "Les élèves ne doivent pas ~ des autres.", "a": "se moquer", "o": ["se moquent", "me moquer", "se moqué"]},
+    {"s": "Sa tante est très bien ~.", "a": "habillée", "o": ["habillé", "habillés", "habiller"]},
+    {"s": "Je me sens ~ seul.", "a": "terriblement", "o": ["terrible", "terribles", "autrefois"]},
+    {"s": "On peut aussi faire ~.", "a": "autrement", "o": ["autre", "autres", "autrefois"]},
+    {"s": "Mon grand frère a ~.", "a": "pris ma défense", "o": ["prendre ma défense", "pris mon défense", "prend ma défense"]},
+    {"s": "La ~ de l'équipe est très forte.", "a": "défense", "o": ["accident", "parapente", "effort"]},
+    {"s": "~, il n'y a plus de place.", "a": "Malheureusement", "o": ["Malheureux", "Malheureuse", "Terriblement"]},
+    {"s": "Ne ~ pas ton frère quand il travaille.", "a": "dérange", "o": ["déranger", "dérangé", "déranges"]},
+    {"s": "Je ne voulais pas te ~.", "a": "blesser", "o": ["blessé", "blesse", "blessez"]},
+    {"s": "Il faut agir ~.", "a": "rapidement", "o": ["rapide", "rapides", "rapidité"]},
+    {"s": "Félix ~ avec ses anciens amis.", "a": "prend ses distances", "o": ["prends ses distances", "prend sa distances", "prendre ses distances"]},
+    {"s": "Il a eu un grave ~.", "a": "accident", "o": ["défense", "prison", "preuve"]},
+    {"s": "Le ~ peut être dangereux.", "a": "parapente", "o": ["prison", "défense", "aide"]},
+    {"s": "Depuis son accident, il est ~.", "a": "handicapé", "o": ["handicapée", "handicapés", "handicaper"]},
+    {"s": "Mes parents ~ pour les associations.", "a": "s'engagent", "o": ["s'engage", "s'engager", "m'engage"]},
+    {"s": "Ma grand-mère a une ~.", "a": "aide à domicile", "o": ["aide à maison", "aide de domicile", "aider à domicile"]},
+    {"s": "Je vais t'~ à faire tes devoirs.", "a": "aider", "o": ["aide", "aidé", "aidez"]},
+    {"s": "Les élèves ~ du collège.", "a": "sortent", "o": ["sort", "sortez", "sortir"]},
+    {"s": "Il a passé trois ans en ~.", "a": "prison", "o": ["accident", "rôle", "cliché"]},
+    {"s": "Je voudrais ~ à jouer du piano.", "a": "apprendre", "o": ["apprends", "appris", "apprenez"]},
+    {"s": "Ce film m'a beaucoup ~.", "a": "plu", "o": ["plaire", "plaît", "plais"]},
+    {"s": "J'adore cette chanteuse, elle est ~.", "a": "géniale", "o": ["génial", "géniaux", "géniales"]},
+    {"s": "Cette histoire me fait ~.", "a": "rire", "o": ["ris", "rit", "ri"]},
+    {"s": "Le sport me ~.", "a": "fait du bien", "o": ["fais du bien", "fait de bien", "faire du bien"]},
+    {"s": "C'est une idée très ~.", "a": "originale", "o": ["original", "originaux", "originales"]},
+    {"s": "Elle reste toujours ~.", "a": "naturelle", "o": ["naturel", "naturels", "naturelles"]},
+    {"s": "Qui joue le ~ du père dans ce film ?", "a": "rôle", "o": ["prison", "culture", "défense"]},
+    {"s": "C'est une histoire très ~.", "a": "touchante", "o": ["touchant", "touchants", "touchantes"]},
+    {"s": "Il ~ de faire un voyage autour du monde.", "a": "rêve", "o": ["rêves", "rêvent", "rêver"]},
+    {"s": "Ce livre est très ~.", "a": "ennuyeux", "o": ["ennuyeuse", "ennuyeuses", "ennuyer"]},
+    {"s": "Son projet est très ~.", "a": "réaliste", "o": ["réalistes", "réalité", "normalement"]},
+    {"s": "~, je vais chez ma grand-mère le week-end.", "a": "Normalement", "o": ["Normal", "Normale", "Normaux"]},
+    {"s": "Il ~ au théâtre et au cinéma.", "a": "s'intéresse", "o": ["s'intéresses", "s'intéresser", "m'intéresse"]},
+    {"s": "J'ai eu ~ de ce pauvre chien.", "a": "pitié", "o": ["cliché", "rôle", "culture"]},
+    {"s": "Les ~ sur les Français sont connus.", "a": "clichés", "o": ["cliché", "cultures", "rôles"]},
+    {"s": "La ~ française est riche.", "a": "culture", "o": ["cliché", "rôle", "thème"]},
+    {"s": "J'aime la musique ~.", "a": "classique", "o": ["classiques", "ennuyeux", "génial"]},
+    {"s": "Ses réactions sont toujours ~.", "a": "exagérées", "o": ["exagéré", "exagérée", "exagérés"]},
+    {"s": "Il faut ~ nos habitudes.", "a": "changer", "o": ["change", "changé", "changeons"]},
+    {"s": "Quel est le ~ de ce roman ?", "a": "thème", "o": ["culture", "tension", "prison"]},
+    {"s": "L'~ de ce livre est très célèbre.", "a": "auteur", "o": ["roman", "thème", "personnage"]},
+    {"s": "J'adore lire des ~.", "a": "romans", "o": ["roman", "rôles", "pouvoirs"]},
+    {"s": "Elle lit un ~ passionnant.", "a": "roman policier", "o": ["roman police", "romans policiers", "roman policière"]},
+    {"s": "Fais un bref ~ de l'histoire.", "a": "résumé", "o": ["résumer", "tension", "culture"]},
+    {"s": "Peux-tu me ~ le paysage ?", "a": "décrire", "o": ["décris", "décrit", "décrivez"]},
+    {"s": "Le ~ principal est très sympa.", "a": "personnage", "o": ["tension", "culture", "prison"]},
+    {"s": "Le ~ raconte son enfance.", "a": "narrateur", "o": ["narratrice", "tension", "narrateurs"]},
+    {"s": "On peut facilement ~ au héros.", "a": "s'identifier", "o": ["s'identifie", "m'identifier", "s'identifié"]},
+    {"s": "Il y a beaucoup de ~ dans cette scène.", "a": "tension", "o": ["personnage", "roman", "narrateur"]},
+    {"s": "Ce roi a beaucoup de ~.", "a": "pouvoir", "o": ["résumé", "personnage", "thème"]},
+    {"s": "La ~ pose des questions.", "a": "journaliste", "o": ["narrateur", "auteur", "personnage"]},
+    {"s": "Le ~ est une grande province du Canada.", "a": "Québec", "o": ["Martinique", "Chine", "Joconde"]},
+    {"s": "La ~ est une belle île française.", "a": "Martinique", "o": ["Québec", "Canada", "Chine"]},
+    {"s": "Les jeunes Canadiens jouent au ~.", "a": "hockey sur glace", "o": ["hockey sur neige", "hockey de glace", "hockey sous glace"]},
+    {"s": "Le caribou est un ~ du Canada.", "a": "symbole", "o": ["volonté", "nourriture", "forêt"]},
+    {"s": "Relever ce ~ sera difficile.", "a": "défi", "o": ["volonté", "nourriture", "forêt"]},
+    {"s": "L'hymne ~ est joué au début.", "a": "national", "o": ["nationale", "nationaux", "nationales"]},
+    {"s": "Le ~ du Québec est bleu et blanc.", "a": "drapeau", "o": ["drapeaux", "volonté", "nourriture"]},
+    {"s": "Le ~ est un pays bilingue.", "a": "Canada", "o": ["Chine", "Martinique", "Seine"]},
+    {"s": "Le Québec est une région ~.", "a": "francophone", "o": ["francophones", "français", "France"]},
+    {"s": "Elle a la ~ de réussir.", "a": "volonté", "o": ["défi", "symbole", "drapeau"]},
+    {"s": "Le Canada est un grand ~.", "a": "pays", "o": ["nourriture", "volonté", "forêt"]},
+    {"s": "Le ~ sous la neige est magnifique.", "a": "paysage", "o": ["nourriture", "volonté", "forêt"]},
+    {"s": "Nous avons ~ de partir en voyage.", "a": "décidé", "o": ["décider", "décidez", "décidons"]},
+    {"s": "L'~ offre de magnifiques couleurs.", "a": "été indien", "o": ["été indienne", "étés indiens", "été d'Inde"]},
+    {"s": "La ~ au Québec est délicieuse.", "a": "nourriture", "o": ["paysage", "climat", "symbole"]},
+    {"s": "Il fait un temps très ~.", "a": "agréable", "o": ["agréables", "agréablement", "francophone"]},
+    {"s": "Elle ~ du Canada.", "a": "vient", "o": ["viens", "venir", "viennent"]},
+    {"s": "La ~ est un grand pays d'Asie.", "a": "Chine", "o": ["Martinique", "Canada", "Québec"]},
+    {"s": "Le ~ Saint-Laurent est très connu.", "a": "boulevard", "o": ["guerre", "forêt", "nourriture"]},
+    {"s": "La ~ de Montréal est gigantesque.", "a": "ville souterraine", "o": ["ville souterrain", "villes souterraines", "ville sous-terre"]},
+    {"s": "Le métro est un train ~.", "a": "souterrain", "o": ["souterraine", "souterrains", "souterraines"]},
+    {"s": "Jacques Cartier était un grand ~.", "a": "navigateur", "o": ["navigatrice", "guerre", "forêt"]},
+    {"s": "Les ~ sont au sud du Canada.", "a": "États-Unis", "o": ["Chine", "Québec", "Martinique"]},
+    {"s": "Le ~ est un grand fleuve au Canada.", "a": "Saint-Laurent", "o": ["Seine", "Québec", "Canada"]},
+    {"s": "Les Européens ont ~ plusieurs territoires.", "a": "colonisé", "o": ["coloniser", "colonisez", "colonisent"]},
+    {"s": "Le ~ canadien est froid en hiver.", "a": "climat", "o": ["guerre", "forêt", "nourriture"]},
+    {"s": "La France et l'Angleterre étaient en ~.", "a": "guerre", "o": ["climat", "boulevard", "degré"]},
+    {"s": "Le français est la langue ~ du Québec.", "a": "officielle", "o": ["officiel", "officiels", "officielles"]},
+    {"s": "Christophe Colomb est le ~ de l'Amérique.", "a": "découvreur", "o": ["découvreuse", "découvrir", "découverte"]},
+    {"s": "Champlain a ~ la ville de Québec.", "a": "fondé", "o": ["fonder", "fondez", "fondent"]},
+    {"s": "En hiver, on peut faire une promenade en ~.", "a": "traîneau", "o": ["degré", "climat", "guerre"]},
+    {"s": "Il y a de grandes ~ au Canada.", "a": "forêts", "o": ["forêt", "traîneaux", "degrés"]},
+    {"s": "En hiver, il ~ souvent au Québec.", "a": "neige", "o": ["neiges", "neiger", "neigé"]},
+    {"s": "La ~ couvre les arbres.", "a": "neige", "o": ["degré", "gîte", "climat"]},
+    {"s": "Aujourd'hui, il fait cinq ~.", "a": "degrés", "o": ["degré", "neiges", "forêts"]},
+    {"s": "Pendant les vacances, nous avons logé dans un ~.", "a": "gîte", "o": ["neige", "forêt", "poutine"]},
+    {"s": "La ~ est un plat typique du Québec.", "a": "poutine", "o": ["caribou", "sirop d'érable", "gîte"]},
+    {"s": "J'aime manger des crêpes avec du ~.", "a": "sirop d'érable", "o": ["sirop de érable", "sirops d'érable", "sirop d'érables"]},
+    {"s": "Ce plat a un goût très ~.", "a": "spécial", "o": ["spéciale", "spéciaux", "spéciales"]},
+    {"s": "Au Québec, on peut voir des ~.", "a": "caribous", "o": ["caribou", "poutines", "menus"]},
+    {"s": "Bonjour, je ~, je m'appelle Marc.", "a": "me présente", "o": ["se présente", "me présenter", "te présentes"]},
+    {"s": "Qu'est-ce qu'il y a au ~ aujourd'hui ?", "a": "menu", "o": ["poutine", "motoneige", "neige"]},
+    {"s": "Le ~ d'hiver de Québec est très célèbre.", "a": "carnaval", "o": ["motoneige", "poutine", "neige"]},
+    {"s": "En ville, il est facile de ~ en métro.", "a": "se déplacer", "o": ["se déplace", "me déplacer", "se déplacé"]},
+    {"s": "En hiver, les Québécois utilisent la ~.", "a": "motoneige", "o": ["carnaval", "menu", "produit"]},
+    {"s": "Les fruits frais sont de bons ~.", "a": "produits", "o": ["produit", "motoneiges", "usines"]},
+    {"s": "Il y a ~ neige que l'année dernière.", "a": "autant de", "o": ["autant que", "aussi de", "autant"]},
+    {"s": "C'est une histoire de ~.", "a": "séduction", "o": ["séduire", "séductions", "séduit"]},
+    {"s": "Il parle trois langues ~.", "a": "étrangères", "o": ["étranger", "étrangère", "étrangers"]},
+    {"s": "~, je fais mes devoirs l'après-midi.", "a": "Le plus souvent", "o": ["La plus souvent", "Le plus souvente", "Les plus souvent"]},
+    {"s": "La ~ est une activité très populaire au Québec.", "a": "pêche", "o": ["tourisme", "produit", "ski de fond"]},
+    {"s": "Ils sont venus ~.", "a": "tous les deux", "o": ["toutes les deux", "tout les deux", "tous le deux"]},
+    {"s": "Mon père travaille dans une ~.", "a": "usine", "o": ["anorak", "tourisme", "produit"]},
+    {"s": "Elle travaille dans la ~ scientifique.", "a": "recherche", "o": ["tourisme", "produit", "anorak"]},
+    {"s": "On peut observer les ~ dans le fleuve Saint-Laurent.", "a": "baleines", "o": ["baleine", "usines", "anoraks"]},
+    {"s": "En hiver, nous faisons du ~.", "a": "ski de fond", "o": ["ski du fond", "skis de fond", "ski de fonds"]},
+    {"s": "Mets ton ~, il fait froid dehors.", "a": "anorak", "o": ["baleine", "usine", "recherche"]},
+    {"s": "Le ~ est important pour la région.", "a": "tourisme", "o": ["pêche", "recherche", "usine"]},
+    {"s": "Après le lycée, il veut ~ de médecine.", "a": "faire des études", "o": ["fait des études", "faire les étude", "faire de études"]},
+    {"s": "Les ~ demandent beaucoup de travail.", "a": "études", "o": ["étude", "étudiant", "étudier"]},
+    {"s": "Il faut ~ les animaux sauvages.", "a": "protéger", "o": ["protège", "protégé", "protégez"]},
+    {"s": "Venez ici ~ !", "a": "immédiatement", "o": ["immédiat", "immédiate", "immédiats"]},
+    {"s": "Quatre-vingts ~ des élèves aiment le sport.", "a": "pour cent", "o": ["par cent", "pour cents", "pour cente"]},
+    {"s": "Le professeur ~ le retard.", "a": "sanctionne", "o": ["sanctionnes", "sanctionnent", "sanctionner"]},
+    {"s": "Il faut respecter le ~ de l'école.", "a": "règlement", "o": ["rentrée", "recherche", "usine"]},
+    {"s": "Ce billet est ~ pour toute la journée.", "a": "valable", "o": ["valables", "valeur", "valablement"]},
+    {"s": "La ~ a lieu en septembre.", "a": "rentrée scolaire", "o": ["rentrée scolaires", "rentrer scolaire", "rentrée d'école"]},
+    {"s": "Son ~ travaille à Paris.", "a": "mari", "o": ["maris", "calendrier", "courage"]},
+    {"s": "Regarde sur le ~ pour connaître la date.", "a": "calendrier", "o": ["mari", "courage", "rentrée"]},
+    {"s": "Il faut du ~ pour faire ça.", "a": "courage", "o": ["mari", "calendrier", "règlement"]},
+    {"s": "~, tu es invité à ma fête.", "a": "Évidemment", "o": ["Évident", "Évidente", "Évidents"]},
+    {"s": "Les ~ aiment écouter de la musique.", "a": "adolescents", "o": ["adolescent", "adolescente", "adolescence"]},
+    {"s": "Il va ~ chez sa grand-mère.", "a": "fréquemment", "o": ["fréquent", "fréquente", "fréquents"]},
+    {"s": "Il a révisé, ~ il a raté son examen.", "a": "pourtant", "o": ["pour", "partout", "pendant"]},
+    {"s": "C'est ~ qu'il a raison.", "a": "évident", "o": ["évidente", "évidents", "évidemment"]},
+    {"s": "Je suis ~ d'accord avec toi.", "a": "absolument", "o": ["absolu", "absolue", "absolus"]},
+    {"s": "Après les cours, je rentre ~ à la maison.", "a": "directement", "o": ["direct", "directe", "directs"]},
+    {"s": "Peux-tu ~ la lumière, s'il te plaît ?", "a": "allumer", "o": ["allume", "allumé", "allumez"]},
+    {"s": "Exprimer ses ~ n'est pas toujours facile.", "a": "sentiments", "o": ["sentiment", "sentir", "sentez"]},
+    {"s": "Il lui a répondu ~.", "a": "méchamment", "o": ["méchant", "méchante", "méchants"]},
+    {"s": "Après la pause, nous ~ notre travail.", "a": "reprenons", "o": ["reprenez", "reprend", "reprendre"]},
+    {"s": "Elle a beaucoup d'~ dans ce domaine.", "a": "expérience", "o": ["sentiment", "courage", "avocat"]},
+    {"s": "Il ~ ses idées clairement.", "a": "exprime", "o": ["exprimes", "expriment", "exprimer"]},
+    {"s": "C'est un travail très ~.", "a": "professionnel", "o": ["professionnelle", "professionnels", "professionnelles"]},
+    {"s": "Son père est ~.", "a": "avocat", "o": ["avocate", "avocats", "sentiment"]},
+    {"s": "Ce chien n'est pas ~.", "a": "méchant", "o": ["méchante", "méchants", "méchamment"]},
+    {"s": "~, nous avons décidé de rester à la maison.", "a": "Finalement", "o": ["Final", "Finale", "Finir"]},
+    {"s": "Notre professeur de français est assez ~.", "a": "strict", "o": ["stricte", "stricts", "strictes"]},
+    {"s": "Une bonne note n'est pas ~ facile à obtenir.", "a": "forcément", "o": ["forcé", "force", "forcer"]},
+    {"s": "Elle m'a ~ aidé à porter mon sac.", "a": "gentiment", "o": ["gentil", "gentille", "gentils"]},
+    {"s": "Mes parents me ~ de sortir le week-end.", "a": "permettent", "o": ["permet", "permettez", "permettre"]},
+    {"s": "Il ~ souvent avec son frère.", "a": "se dispute", "o": ["se disputes", "se disputer", "me dispute"]},
+    {"s": "J'aime ~ pour mes amis.", "a": "faire la cuisine", "o": ["fais la cuisine", "faire le cuisine", "fait la cuisine"]},
+    {"s": "Mets ton assiette dans le ~.", "a": "lave-vaisselle", "o": ["lave-linge", "couvert", "ascenseur"]},
+    {"s": "Mets ton pantalon sale dans le ~.", "a": "lave-linge", "o": ["lave-vaisselle", "couvert", "ascenseur"]},
+    {"s": "Les enfants ~ avant le dîner.", "a": "mettent le couvert", "o": ["met le couvert", "mettent la couvert", "mettre le couvert"]},
+    {"s": "~ ta chambre s'il te plaît.", "a": "Range", "o": ["Ranger", "Rangé", "Ranges"]},
+    {"s": "Nous partageons les ~.", "a": "tâches ménagères", "o": ["tâche ménagère", "tâches ménagers", "tâches ménagère"]},
+    {"s": "N'oublie pas de poser les ~.", "a": "couverts", "o": ["couvert", "ascenseurs", "lave-linge"]},
+    {"s": "Nous prenons l'~ pour monter au cinquième étage.", "a": "ascenseur", "o": ["couvert", "poubelle", "reste"]},
+    {"s": "Cet exercice de grammaire est ~.", "a": "compliqué", "o": ["compliquée", "compliqués", "compliquer"]},
+    {"s": "~, nous allons au restaurant.", "a": "De temps en temps", "o": ["Du temps en temps", "De temps à temps", "De temps en temp"]},
+    {"s": "C'est ton tour de ~ !", "a": "descendre les poubelles", "o": ["descend les poubelles", "descendre la poubelles", "descendu les poubelles"]},
+    {"s": "La ~ vient deux fois par semaine.", "a": "femme de ménage", "o": ["femme du ménage", "femmes de ménage", "femme de ménagère"]},
+    {"s": "Je vais manger le ~ de la soupe.", "a": "reste", "o": ["poubelle", "couvert", "doute"]},
+    {"s": "Jette ce papier dans la ~.", "a": "poubelle", "o": ["reste", "couvert", "ascenseur"]},
+    {"s": "Il faut ~ pour faire tous les devoirs.", "a": "s'organiser", "o": ["s'organise", "s'organisé", "organises"]},
+    {"s": "Peux-tu ~ la table ?", "a": "essuyer", "o": ["essuie", "essuyé", "essuyez"]},
+    {"s": "Il ~ le chien tous les soirs.", "a": "sort", "o": ["sors", "sortent", "sortir"]},
+    {"s": "J'ai ~ de ton aide.", "a": "besoin", "o": ["droit", "doute", "reste"]},
+    {"s": "Ça m'est ~, choisis ce que tu veux.", "a": "égal", "o": ["égale", "égaux", "également"]},
+    {"s": "Tu as le ~ de donner ton avis.", "a": "droit", "o": ["doute", "profil", "reste"]},
+    {"s": "Je joue souvent ~ avec mes amis.", "a": "en ligne", "o": ["à ligne", "en lignes", "sur ligne"]},
+    {"s": "Il ne faut pas ~ les autres.", "a": "espionner", "o": ["espionne", "espionné", "espionnez"]},
+    {"s": "~, je viendrai !", "a": "Bien sûr que oui", "o": ["Bien sûr que non", "Bien sûr oui que", "Bien sûre que oui"]},
+    {"s": "Il a mis une nouvelle photo sur son ~.", "a": "profil", "o": ["doute", "reste", "mot de passe"]},
+    {"s": "Ce plat est vraiment ~.", "a": "dégoûtant", "o": ["dégoûtante", "dégoûtants", "dégoûtantes"]},
+    {"s": "Mes parents m'~ d'utiliser mon téléphone tard le soir.", "a": "interdisent", "o": ["interdit", "interdire", "interdis"]},
+    {"s": "J'ai oublié mon ~.", "a": "mot de passe", "o": ["mot du passe", "mots de passe", "mot de passer"]},
+    {"s": "Il faut ~ le règlement.", "a": "respecter", "o": ["respecte", "respecté", "respectez"]},
+    {"s": "J'ai ~ qu'il était fatigué.", "a": "remarqué", "o": ["remarquer", "remarquez", "remarque"]},
+    {"s": "Si tu as un ~, pose une question.", "a": "doute", "o": ["vérité", "poubelle", "confiance"]},
+    {"s": "Cette information est ~.", "a": "privée", "o": ["privé", "privés", "privées"]},
+    {"s": "Je fais entièrement ~ à mon ami.", "a": "confiance", "o": ["doute", "vérité", "profil"]},
+    {"s": "Elle lui a dit ses ~.", "a": "quatre vérités", "o": ["quatre vérité", "trois vérités", "quatre doutes"]},
+    {"s": "Dis-moi la ~ !", "a": "vérité", "o": ["doute", "profil", "mot de passe"]},
+    {"s": "Je ne ~ pas du mal de toi.", "a": "pense", "o": ["penses", "pensent", "penser"]},
+    {"s": "La ~ compte treize régions.", "a": "France métropolitaine", "o": ["France métropolitain", "France métropole", "Frances métropolitaines"]},
+    {"s": "Les territoires d'~ sont magnifiques.", "a": "outre-mer", "o": ["outre-terre", "autre-mer", "outre-mers"]},
+    {"s": "Le ~ sort en mer très tôt le matin.", "a": "pêcheur", "o": ["pêcheuse", "pêche", "rocher"]},
+    {"s": "Ce que tu dis, c'est ~ !", "a": "n'importe quoi", "o": ["n'importe que", "ne importe quoi", "n'importe quel"]},
+    {"s": "Il ne faut pas ~ à ses amis.", "a": "mentir", "o": ["mens", "menti", "mentez"]},
+    {"s": "En Provence, on ~ la lavande.", "a": "cultive", "o": ["cultives", "cultivent", "cultiver"]},
+    {"s": "Les champs de ~ sont magnifiques en été.", "a": "lavande", "o": ["plongée", "solitude", "chamois"]},
+    {"s": "En vacances, nous faisons de la ~.", "a": "plongée", "o": ["lavande", "solitude", "biodiversité"]},
+    {"s": "La zone ~ est protégée.", "a": "littorale", "o": ["littoral", "littoraux", "littorales"]},
+    {"s": "Dans les montagnes, on peut apercevoir des ~.", "a": "chamois", "o": ["plongées", "solitudes", "biodiversités"]},
+    {"s": "Le paysage ~ est sublime.", "a": "alpin", "o": ["alpine", "alpins", "alpines"]},
+    {"s": "Attention aux ~ au bord de la mer.", "a": "rochers", "o": ["rocher", "solitudes", "lavandes"]},
+    {"s": "Il aime la ~ de la montagne.", "a": "solitude", "o": ["rocher", "chamois", "bouquetin"]},
+    {"s": "Le ~ vit dans les hautes montagnes.", "a": "bouquetin", "o": ["baleine", "lavande", "plongée"]},
+    {"s": "Nous allons skier dans les ~ cet hiver.", "a": "Alpes", "o": ["Alpe", "Alpins", "Martinique"]},
+    {"s": "Le nombre de touristes ~ chaque année.", "a": "augmente", "o": ["augmentes", "augmentent", "augmenter"]},
+    {"s": "Il faut ~ la biodiversité dans les Alpes.", "a": "préserver", "o": ["préserve", "préservé", "préservez"]},
+    {"s": "La ~ est essentielle pour la planète.", "a": "biodiversité", "o": ["rocher", "chamois", "paradis"]},
+    {"s": "Quel est le plus grand bâtiment ~ ces immeubles ?", "a": "parmi", "o": ["pourtant", "autant", "pendant"]},
+    {"s": "Le Mont Saint-Michel est une ~.", "a": "merveille", "o": ["paradis", "sable", "rocher"]},
+    {"s": "Nous avons passé une très bonne ~.", "a": "soirée", "o": ["séjour", "paradis", "sable"]},
+    {"s": "Le coucher de soleil est ~.", "a": "magnifique", "o": ["magnifiques", "merveille", "littorale"]},
+    {"s": "Mes grands-parents habitent à la ~.", "a": "campagne", "o": ["paradis", "sable", "séjour"]},
+    {"s": "Elle fait de l'~ tous les samedis.", "a": "équitation", "o": ["voile", "plongée", "campagne"]},
+    {"s": "En Normandie, on peut faire de la ~.", "a": "voile", "o": ["sable", "paradis", "séjour"]},
+    {"s": "La Bretagne est un vrai ~ pour les marins.", "a": "paradis", "o": ["merveille", "campagne", "soirée"]},
+    {"s": "Qui a ~ le téléphone ?", "a": "inventé", "o": ["inventer", "inventez", "inventent"]},
+    {"s": "Les enfants jouent sur le ~.", "a": "sable", "o": ["campagne", "soirée", "découverte"]},
+    {"s": "Partons à la ~ de la Normandie !", "a": "découverte", "o": ["découvreur", "découvrir", "découvert"]},
+    {"s": "Après le sport, je ~ !", "a": "meurs de faim", "o": ["meurt de faim", "mourir de faim", "meurs du faim"]},
+    {"s": "Donne-moi de l'eau, je ~.", "a": "meurs de soif", "o": ["meurs de faim", "meurt de soif", "mourir de soif"]},
+    {"s": "Ses plaisanteries me font ~.", "a": "mourir de rire", "o": ["mourir de faim", "mourir de soif", "meurs de rire"]},
+    {"s": "Je vais ~ au club de football.", "a": "m'inscrire", "o": ["s'inscrire", "m'inscris", "t'inscrire"]},
+    {"s": "Cette surprise lui a fait très ~.", "a": "plaisir", "o": ["sourire", "séjour", "dîner"]},
+    {"s": "~ élèves préfèrent les mathématiques.", "a": "Certains", "o": ["Certain", "Certaine", "Certaines"]},
+    {"s": "Mon frère ~ l'année dernière.", "a": "s'est marié", "o": ["s'est marier", "a marié", "s'est mariée"]},
+    {"s": "Elle m'a ~ de venir.", "a": "persuadé", "o": ["persuader", "persuadez", "persuade"]},
+    {"s": "Courage, il faut ~ !", "a": "tenir le coup", "o": ["tenir la coup", "tiens le coup", "tenu le coup"]},
+    {"s": "Il lui a ~ pour l'aider.", "a": "tendu la main", "o": ["tendre la main", "tendu le main", "tend la main"]},
+    {"s": "Elle a toujours un joli ~.", "a": "sourire", "o": ["soirée", "merveille", "campagne"]},
+    {"s": "Je suis ~ d'avoir perdu le match.", "a": "dégoûté", "o": ["dégoûtant", "dégoûter", "dégoûtés"]},
+    {"s": "Notre voiture est sur le ~.", "a": "parking", "o": ["séjour", "dîner", "sourire"]},
+    {"s": "J'ai fait un très agréable ~ à Paris.", "a": "séjour", "o": ["soirée", "campagne", "merveille"]},
+    {"s": "Je me sens très ~ dans cette classe.", "a": "à l'aise", "o": ["à la aise", "en l'aise", "à l'aide"]},
+    {"s": "Le ~ est prêt !", "a": "dîner", "o": ["soirée", "campagne", "merveille"]},
+    {"s": "Il faut ~ avant le virage.", "a": "freiner", "o": ["freine", "freiné", "freinez"]},
+    {"s": "Peux-tu me ~ ton stylo ?", "a": "prêter", "o": ["prête", "prêté", "prêtez"]},
+    {"s": "La voiture ~ vite.", "a": "roule", "o": ["roules", "roulent", "rouler"]},
+    {"s": "Elle était ~ d'arriver en retard.", "a": "gênée", "o": ["gêné", "gênés", "gêner"]},
+    {"s": "Tu as un ~ s'il te plaît ?", "a": "mouchoir", "o": ["soirée", "campagne", "merveille"]},
+    {"s": "Nous partons en vacances ~.", "a": "après-demain", "o": ["autrefois", "hier", "avant-hier"]},
+    {"s": "J'ai envoyé une ~ à ma grand-mère.", "a": "carte postale", "o": ["carte postal", "cartes postales", "carte de poste"]},
+    {"s": "Le chat ~ sous le lit.", "a": "se cache", "o": ["se caches", "se cacher", "me cache"]},
+    {"s": "Il a ~ son travail l'année dernière.", "a": "quitté", "o": ["quitter", "quittez", "quittent"]},
+    {"s": "Je vais ~ un moment.", "a": "m'allonger", "o": ["s'allonger", "m'allonge", "t'allonger"]},
+    {"s": "Le ~ m'a donné un médicament.", "a": "médecin", "o": ["pansement", "mouchoir", "parking"]},
+    {"s": "Mets un ~ sur ta blessure.", "a": "pansement", "o": ["médecin", "parking", "séjour"]},
+    {"s": "~, nous sommes arrivés.", "a": "Au bout d'un moment", "o": ["Au bout de un moment", "À bout d'un moment", "Au bout d'une moment"]},
+    {"s": "N'oubliez pas de ~ pendant la présentation.", "a": "prendre des notes", "o": ["prend des notes", "prendre de notes", "pris des notes"]}
   ];
 
   // Eigennamen und Orte aus dem Volet (im Buch kursiv erklärt)
@@ -429,17 +1066,19 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
   var PRAISE = ["Richtig!", "Super!", "Très bien !", "Bravo !", "Genau!", "Parfait !"];
 
   /* ================= Steps aufbauen ================= */
+  var BLOCKS = Math.ceil(VOCAB.length / PER_STEP);
   var STEPS = [];
   (function buildSteps() {
-    var blocks = VOCAB.length / PER_STEP;
-    for (var b = 0; b < blocks; b++) {
-      var group = "Block " + (b + 1) + " · Wörter " + (b * PER_STEP + 1) + "–" + ((b + 1) * PER_STEP);
+    for (var b = 0; b < BLOCKS; b++) {
+      var first = b * PER_STEP + 1;
+      var last = Math.min((b + 1) * PER_STEP, VOCAB.length);
+      var group = "Block " + (b + 1) + " · Wörter " + first + "–" + last + (last - first + 1 < PER_STEP ? " + Mix" : "");
       STEPS.push({ id: "b" + (b + 1) + "-mc", type: "mc", block: b, group: group });
       STEPS.push({ id: "b" + (b + 1) + "-sp", type: "speak", block: b, group: group });
       STEPS.push({ id: "b" + (b + 1) + "-gr", type: "cloze", block: b, group: group });
       if (b === 2) STEPS.push({ id: "paris-1", type: "mc", paris: 0, group: "Paris-Wissen 1" });
+      if (b === 5) STEPS.push({ id: "paris-2", type: "mc", paris: 1, group: "Paris-Wissen 2" });
     }
-    STEPS.push({ id: "paris-2", type: "mc", paris: 1, group: "Paris-Wissen 2" });
   })();
 
   /* ================= Kleine Helfer ================= */
@@ -677,15 +1316,18 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
     }
     startLesson(index);
   }
-  function goHome() {
-    endLesson();
-    show("home");
-    renderHome();
+  function scrollToCurrent() {
     var open = openSteps();
     var target = nodeButtons[open.length ? open[0] : nodeButtons.length - 1];
     if (target && target.scrollIntoView) {
       try { target.scrollIntoView({ block: "center" }); } catch (e) { target.scrollIntoView(); }
     }
+  }
+  function goHome() {
+    endLesson();
+    show("home");
+    renderHome();
+    scrollToCurrent();
   }
 
   var resetArmed = false, resetTimer = null;
@@ -708,37 +1350,66 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
   }
 
   /* ================= Aufgaben erzeugen ================= */
-  function blockVocab(b) { return VOCAB.slice(b * PER_STEP, (b + 1) * PER_STEP); }
+  function blockIndices(b) {
+    var list = [];
+    for (var i = b * PER_STEP; i < Math.min((b + 1) * PER_STEP, VOCAB.length); i++) list.push(i);
+    if (list.length < PER_STEP) {
+      // Letzter Block: mit zufälligen früheren Wörtern auf 7 Aufgaben auffüllen.
+      var earlier = [];
+      for (var j = 0; j < b * PER_STEP; j++) earlier.push(j);
+      list = list.concat(shuffle(earlier).slice(0, PER_STEP - list.length));
+    }
+    return list;
+  }
   function buildTasks(step) {
     var tasks;
     if (step.paris !== undefined) {
       tasks = PARIS[step.paris].map(function (item) { return { kind: "mc", item: item, pool: PARIS[step.paris] }; });
-    } else if (step.type === "mc") {
-      tasks = blockVocab(step.block).map(function (item) { return { kind: "mc", item: item, pool: null, block: step.block }; });
-    } else if (step.type === "speak") {
-      tasks = blockVocab(step.block).map(function (item) { return { kind: "speak", item: item }; });
     } else {
-      tasks = CLOZE.slice(step.block * PER_STEP, (step.block + 1) * PER_STEP).map(function (item) { return { kind: "cloze", item: item }; });
+      var idx = blockIndices(step.block);
+      var mates = idx.map(function (i) { return VOCAB[i]; });
+      tasks = idx.map(function (i) {
+        if (step.type === "mc") return { kind: "mc", item: VOCAB[i], mates: mates };
+        if (step.type === "speak") return { kind: "speak", item: VOCAB[i] };
+        return { kind: "cloze", item: CLOZE[i], vocab: VOCAB[i] };
+      });
     }
     return shuffle(tasks);
   }
+
+  // Für gute falsche Antworten: Wortart grob erkennen und Beinahe-Synonyme ausschließen
+  // (z. B. "der Laden" und "das Geschäft, der Laden" nie zusammen anbieten).
+  var DE_STOP = ("der die das ein eine einen einem einer etwas jemanden jemandem jemand sich auf über von zu für mit in im am an aus " +
+    "bei nach und oder auch hier sein haben machen nicht den dem des um vor so viel viele sehr gut gehen tun sagen").split(" ");
+  function deWords(de) {
+    return de.toLowerCase().split(/[^a-zäöüß]+/).filter(function (w) { return w.length > 2 && DE_STOP.indexOf(w) < 0; });
+  }
+  function deKind(de) {
+    var d = de.toLowerCase();
+    if (/^(der|die|das)[ \/]/.test(d)) return "n";
+    var head = d.split(/[,;(\/]/)[0].replace(/\s+$/, "");
+    if (/^(sich|etwas|jemand)/.test(d) || /(en|ern|eln)$/.test(head)) return "v";
+    return "x";
+  }
+  VOCAB.forEach(function (v) { v.words = deWords(v.de); v.kind = deKind(v.de); });
+  function tooClose(a, b) { return a.words.some(function (w) { return b.words.indexOf(w) >= 0; }); }
   function mcOptions(task) {
-    var right = task.item.de;
-    var wrong = [];
-    function add(list) {
+    var item = task.item, right = item.de, wrong = [];
+    function take(list, limit, test) {
       shuffle(list).forEach(function (v) {
-        if (wrong.length < 3 && v.de !== right && wrong.indexOf(v.de) < 0) wrong.push(v.de);
+        if (wrong.length >= limit || v === item || v.de === right || wrong.indexOf(v.de) >= 0) return;
+        if (test && !test(v)) return;
+        wrong.push(v.de);
       });
     }
     if (task.pool) {
-      add(task.pool);
+      take(task.pool, 3, null);
     } else {
-      // zwei Ablenker aus demselben Block, einer aus dem Rest
-      var same = blockVocab(task.block);
-      shuffle(same).forEach(function (v) {
-        if (wrong.length < 2 && v.de !== right) wrong.push(v.de);
-      });
-      add(VOCAB);
+      var far = function (v) { return !tooClose(v, item); };
+      take(task.mates, 2, far);                                                    // zwei aus demselben Block
+      take(VOCAB, 3, function (v) { return far(v) && v.kind === item.kind; });     // Rest: gleiche Wortart
+      take(VOCAB, 3, far);
+      take(VOCAB, 3, null);
     }
     return shuffle([right].concat(wrong));
   }
@@ -790,18 +1461,25 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
     return false;
   }
   // "le visiteur / la visiteuse" -> [["visiteur"], ["visiteuse"]]
-  function variants(item) {
+  var ARTICLES = { le: 1, la: 1, les: 1, l: 1, un: 1, une: 1 };
+  function variants(item, spoken) {
     var list = [];
-    item.fr.split("/").forEach(function (part) {
+    var parts = item.say ? item.say.split(",") : item.fr.split("/");
+    parts.forEach(function (part) {
       var w = words(part);
-      if (w.length > 1 && (w[0] === "le" || w[0] === "la" || w[0] === "les" || w[0] === "l")) w = w.slice(1);
+      if (w.length > 1 && ARTICLES[w[0]]) w = w.slice(1);
       if (w.length > 1 && w[w.length - 1] === "qc") w = w.slice(0, -1);
+      if (spoken) {
+        // Die Spracherkennung verschluckt gern "se" am Anfang und "de/à/que" am Ende.
+        if (w.length > 1 && (w[0] === "se" || w[0] === "s")) w = w.slice(1);
+        while (w.length > 1 && /^(de|d|a|que)$/.test(w[w.length - 1])) w = w.slice(0, -1);
+      }
       if (w.length) list.push(w);
     });
     return list;
   }
   function matchSpoken(heardList, item) {
-    var targets = variants(item);
+    var targets = variants(item, true);
     (item.alt || []).forEach(function (a) { var w = words(a); if (w.length) targets.push(w); });
     for (var h = 0; h < heardList.length; h++) {
       var hay = words(heardList[h]).map(stem);
@@ -813,13 +1491,13 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
   }
   function matchTyped(text, item) {
     var hay = words(text);
-    var targets = variants(item);
+    var targets = variants(item, false);
     for (var t = 0; t < targets.length; t++) {
       if (containsSeq(hay, targets[t], false)) return true;
     }
     return false;
   }
-  function sayText(item) { return item.fr.replace(/\s+qc$/, "").replace(/\s*\/\s*/g, ", "); }
+  function sayText(item) { return item.say ? item.say : item.fr.replace(/\s+qc$/, "").replace(/\s*\/\s*/g, ", "); }
 
   /* ================= Vorlesen (optional) ================= */
   var canSpeakOut = false;
@@ -1064,9 +1742,11 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
     prompt.appendChild(text);
     body.appendChild(prompt);
 
-    var box = el("div", "options two");
+    var all = [item.a].concat(item.o);
+    var longest = Math.max.apply(null, all.map(function (t) { return t.length; }));
+    var box = el("div", longest > 14 ? "options" : "options two");
     var buttons = [];
-    shuffle([item.a].concat(item.o)).forEach(function (optionText) {
+    shuffle(all).forEach(function (optionText) {
       var b = el("button", "opt", optionText);
       b.type = "button";
       b.lang = "fr";
@@ -1083,7 +1763,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
           answerCorrect("");
         } else {
           b.classList.add("bad");
-          answerWrong("Nicht ganz. Richtig ist:", full, item.de, full);
+          answerWrong("Nicht ganz. Richtig ist:", full, item.de || (task.vocab.fr + " = " + task.vocab.de), full);
         }
       });
       buttons.push({ button: b, text: optionText });
@@ -1125,7 +1805,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
       ui.info("Tippe aufs Mikrofon und sprich das Wort.");
       area.appendChild(mic);
     } else {
-      ui.warn("Dieser Browser hat keine Spracherkennung. Tippe die Antwort oder nutze „Trotzdem richtig“.");
+      ui.warn("Dieser Browser hat keine Spracherkennung. Öffne die Seite in Chrome, Edge oder Safari. Bis dahin: Antwort tippen oder „Trotzdem richtig“.");
     }
     area.appendChild(status);
 
@@ -1259,8 +1939,11 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
         renderTopbar();
       }
     });
+    if (CLOZE.length !== VOCAB.length) throw new Error("Daten unvollständig");
     show("home");
     renderHome();
+    try { if ("scrollRestoration" in window.history) window.history.scrollRestoration = "manual"; } catch (e) { /* egal */ }
+    if (openSteps()[0] > 0) scrollToCurrent();   // beim Wiederöffnen direkt zum aktuellen Step
     saveState();
   }
   try {
