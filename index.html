@@ -1492,6 +1492,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
   function matchTyped(text, item) {
     var hay = words(text);
     var targets = variants(item, false);
+    if (item.say) (item.alt || []).forEach(function (a) { var w = words(a); if (w.length) targets.push(w); });
     for (var t = 0; t < targets.length; t++) {
       if (containsSeq(hay, targets[t], false)) return true;
     }
@@ -1525,12 +1526,12 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
   try { Recognition = window.SpeechRecognition || window.webkitSpeechRecognition || null; } catch (e) { Recognition = null; }
   var rec = null, recTimer = null;
   var MIC_ERRORS = {
-    "not-allowed": "Das Mikrofon ist blockiert. Erlaube es in den Browser-Einstellungen oder tippe unten auf „Trotzdem richtig“.",
-    "service-not-allowed": "Die Spracherkennung ist auf diesem Gerät gesperrt. Tippe die Antwort oder nutze „Trotzdem richtig“.",
-    "audio-capture": "Kein Mikrofon gefunden. Tippe die Antwort oder nutze „Trotzdem richtig“.",
-    "network": "Die Spracherkennung braucht Internet. Tippe die Antwort oder nutze „Trotzdem richtig“.",
+    "not-allowed": "Das Mikrofon ist blockiert. Erlaube es in den Browser-Einstellungen oder tippe die Antwort ins Feld.",
+    "service-not-allowed": "Die Spracherkennung ist auf diesem Gerät gesperrt. Tippe die Antwort ins Feld.",
+    "audio-capture": "Kein Mikrofon gefunden. Tippe die Antwort ins Feld.",
+    "network": "Die Spracherkennung braucht Internet. Tippe die Antwort ins Feld.",
     "no-speech": "Ich habe nichts gehört. Tippe aufs Mikrofon und sprich laut und deutlich.",
-    "language-not-supported": "Dieser Browser erkennt kein Französisch. Tippe die Antwort oder nutze „Trotzdem richtig“."
+    "language-not-supported": "Dieser Browser erkennt kein Französisch. Tippe die Antwort ins Feld."
   };
   function stopSpeech() {
     if (recTimer) { clearTimeout(recTimer); recTimer = null; }
@@ -1594,7 +1595,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
       recTimer = setTimeout(function () { try { r.stop(); } catch (e) { /* egal */ } }, 9000);
     } catch (e) {
       rec = null;
-      ui.warn("Das Mikrofon konnte nicht gestartet werden. Tippe die Antwort oder nutze „Trotzdem richtig“.");
+      ui.warn("Das Mikrofon konnte nicht gestartet werden. Tippe die Antwort ins Feld.");
     }
   }
 
@@ -1805,7 +1806,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
       ui.info("Tippe aufs Mikrofon und sprich das Wort.");
       area.appendChild(mic);
     } else {
-      ui.warn("Dieser Browser hat keine Spracherkennung. Öffne die Seite in Chrome, Edge oder Safari. Bis dahin: Antwort tippen oder „Trotzdem richtig“.");
+      ui.warn("Dieser Browser hat keine Spracherkennung. Öffne die Seite in Chrome, Edge oder Safari. Bis dahin kannst du die Antwort tippen.");
     }
     area.appendChild(status);
 
@@ -1834,11 +1835,6 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
       ui.info("Das stimmt noch nicht ganz. Prüfe die Schreibweise.");
     });
     area.appendChild(input);
-
-    var skip = el("button", "wide", "✓ Trotzdem richtig / Überspringen");
-    skip.type = "button";
-    skip.addEventListener("click", function () { answerCorrect(item.fr); });
-    area.appendChild(skip);
 
     var unknown = el("button", "wide ghost", "Weiß ich nicht – Lösung zeigen");
     unknown.type = "button";
