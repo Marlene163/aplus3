@@ -29,6 +29,9 @@
   --yellow-amber: #f59a0b;       /* Grammatik & Lückentext */
   --yellow-amber-edge: #c27503;
   --yellow-ink: #6b4700;
+  --review: #ce82ff;             /* Wiederholung der Fehlerwörter */
+  --review-edge: #a05fd0;
+  --review-ink: #6a2fa0;
   --gold: #ffd43b;
   --gold-edge: #b88600;
   --red: #ff4b4b;
@@ -101,6 +104,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
 .dot.t-mc { background: var(--yellow-light); box-shadow: 0 3px 0 var(--yellow-light-edge); }
 .dot.t-speak { background: var(--yellow-sun); box-shadow: 0 3px 0 var(--yellow-sun-edge); }
 .dot.t-cloze { background: var(--yellow-amber); box-shadow: 0 3px 0 var(--yellow-amber-edge); }
+.legend .dot.t-review { background: var(--review); box-shadow: 0 3px 0 var(--review-edge); color: #fff; }
 .note { margin: 0; padding: 10px 14px; border-radius: 12px; background: var(--red-soft); color: var(--red-ink); font-weight: 700; font-size: 13px; }
 
 .path { position: relative; display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 6px 0 10px; }
@@ -122,6 +126,8 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
 .node.t-mc.s-open { background: var(--yellow-light); box-shadow: 0 8px 0 var(--yellow-light-edge); color: var(--yellow-ink); }
 .node.t-speak.s-open { background: var(--yellow-sun); box-shadow: 0 8px 0 var(--yellow-sun-edge); color: var(--yellow-ink); }
 .node.t-cloze.s-open { background: var(--yellow-amber); box-shadow: 0 8px 0 var(--yellow-amber-edge); color: var(--yellow-ink); }
+.node.t-review.s-open { background: var(--review); box-shadow: 0 8px 0 var(--review-edge); color: #fff; }
+.node.t-review.s-open:active { box-shadow: 0 3px 0 var(--review-edge); }
 .node.t-mc.s-open:active { box-shadow: 0 3px 0 var(--yellow-light-edge); }
 .node.t-speak.s-open:active { box-shadow: 0 3px 0 var(--yellow-sun-edge); }
 .node.t-cloze.s-open:active { box-shadow: 0 3px 0 var(--yellow-amber-edge); }
@@ -136,6 +142,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
 .node.shake { animation: shake .3s; }
 .row .label { font-weight: 800; font-size: 12px; color: var(--muted); background: var(--paper); padding: 0 6px; border-radius: 6px; }
 .row.is-open .label { color: var(--ink); }
+.row.is-review.is-open .label { color: var(--review-ink); }
 .row.has-bubble { margin-top: 30px; }
 .bubble {
   position: absolute; top: -34px; left: 50%; transform: translateX(-50%);
@@ -1061,8 +1068,10 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
   var PER_STEP = 7;
   var GEMS_PER_ANSWER = 2;
   var ADVANCE_MS = 800;
-  var TYPE_LABEL = { mc: "Übersetzen", speak: "Sprechen", cloze: "Lückentext" };
-  var TYPE_LEGEND = { mc: "Französisch → Deutsch", speak: "Deutsch → Französisch (sprechen)", cloze: "Grammatik & Lückentext" };
+  var REVIEW_EVERY = 3;    // nach so vielen Blöcken kommt ein Wiederholungsknoten
+  var REVIEW_MAX = 12;     // höchstens so viele Fragen pro Wiederholung
+  var TYPE_LABEL = { mc: "Übersetzen", speak: "Sprechen", cloze: "Lückentext", review: "Wiederholung" };
+  var TYPE_LEGEND = { mc: "Französisch → Deutsch", speak: "Deutsch → Französisch (sprechen)", cloze: "Grammatik & Lückentext", review: "Wiederholung deiner Fehlerwörter" };
   var PRAISE = ["Richtig!", "Super!", "Très bien !", "Bravo !", "Genau!", "Parfait !"];
 
   /* ================= Steps aufbauen ================= */
@@ -1076,9 +1085,13 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
       STEPS.push({ id: "b" + (b + 1) + "-mc", type: "mc", block: b, group: group });
       STEPS.push({ id: "b" + (b + 1) + "-sp", type: "speak", block: b, group: group });
       STEPS.push({ id: "b" + (b + 1) + "-gr", type: "cloze", block: b, group: group });
+      if ((b + 1) % REVIEW_EVERY === 0) {
+        STEPS.push({ id: "rev-" + ((b + 1) / REVIEW_EVERY), type: "review", group: "Wiederholung nach Block " + (b + 1) });
+      }
       if (b === 2) STEPS.push({ id: "paris-1", type: "mc", paris: 0, group: "Paris-Wissen 1" });
       if (b === 5) STEPS.push({ id: "paris-2", type: "mc", paris: 1, group: "Paris-Wissen 2" });
     }
+    if (BLOCKS % REVIEW_EVERY !== 0) STEPS.push({ id: "rev-end", type: "review", group: "Abschluss-Wiederholung" });
   })();
 
   /* ================= Kleine Helfer ================= */
@@ -1105,6 +1118,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
     mc: { stroke: ["M3.5 5.5c3-1.2 6-1 8.5 1 2.5-2 5.500-2.200 8.500-1v13c-3-1.200-6-1-8.500 1-2.500-2-5.500-2.200-8.500-1z", "M12 6.500v13"] },
     speak: { stroke: ["M12 3a3 3 0 0 1 3 3v5a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3z", "M5.500 11a6.500 6.500 0 0 0 13 0", "M12 17.500V21"] },
     cloze: { stroke: ["M4 20l1-4.500L16 4.500l3.500 3.500L8.500 19z", "M13.500 7l3.500 3.500"] },
+    review: { stroke: ["M4.500 11a7.500 7.500 0 0 1 13-4.500L19.500 8.500", "M19.500 4v4.500H15", "M19.500 13a7.500 7.500 0 0 1-13 4.500L4.500 15.500", "M4.500 20v-4.500H9"] },
     lock: { stroke: ["M6 11h12v9H6z", "M8.500 11V8a3.500 3.500 0 0 1 7 0v3"] },
     check: { stroke: ["M5 12.500l4.500 4.500L19 7"], width: 3.4 },
     star: { fill: ["M12 2.500l2.900 6 6.600.900-4.800 4.600 1.200 6.500L12 17.400l-5.900 3.100 1.200-6.500-4.800-4.600 6.600-.900z"] }
@@ -1139,7 +1153,8 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
   /* ================= Speicherung (localStorage, abgesichert) ================= */
   var STORE_KEY = "aplus3-u1v1-v1";
   var storageOK = true;
-  function freshState() { return { done: {}, gems: 0, streak: 0, lastDay: "" }; }
+  // review = Fehlerliste: Positionen der Wörter in VOCAB, das älteste zuerst
+  function freshState() { return { v: 2, done: {}, gems: 0, streak: 0, lastDay: "", review: [] }; }
   function loadState() {
     var s = freshState();
     try {
@@ -1156,6 +1171,18 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
           if (isFinite(Number(p.gems))) s.gems = Math.max(0, Math.floor(Number(p.gems)));
           if (isFinite(Number(p.streak))) s.streak = Math.max(0, Math.floor(Number(p.streak)));
           if (typeof p.lastDay === "string") s.lastDay = p.lastDay;
+          if (Array.isArray(p.review)) {
+            p.review.forEach(function (n) {
+              n = Number(n);
+              if (n >= 0 && n < VOCAB.length && Math.floor(n) === n && s.review.indexOf(n) < 0) s.review.push(n);
+            });
+          }
+          if (p.v !== 2) {
+            // Stand aus der Version ohne Wiederholungsknoten: Knoten, an denen sie schon vorbei ist, gelten als erledigt.
+            var furthest = -1;
+            STEPS.forEach(function (st, i) { if (s.done[st.id]) furthest = i; });
+            STEPS.forEach(function (st, i) { if (st.type === "review" && i < furthest && !s.done[st.id]) s.done[st.id] = 1; });
+          }
         }
       }
     } catch (e) {
@@ -1225,7 +1252,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
   function renderLegend() {
     var list = $("legend");
     clear(list);
-    ["mc", "speak", "cloze"].forEach(function (type) {
+    ["mc", "speak", "cloze", "review"].forEach(function (type) {
       var li = el("li");
       var dot = el("span", "dot t-" + type);
       dot.appendChild(icon(type));
@@ -1241,7 +1268,9 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
       if (state.done[st.id]) doneCount++;
       if (state.done[st.id] === 2) stars++;
     });
-    $("progress-line").textContent = doneCount + " von " + STEPS.length + " Steps geschafft · " + stars + " ★ fehlerfrei";
+    var listed = state.review.length;
+    $("progress-line").textContent = doneCount + " von " + STEPS.length + " Steps geschafft · " + stars + " ★ fehlerfrei" +
+      (listed ? " · " + listed + (listed === 1 ? " Fehlerwort" : " Fehlerwörter") : "");
     $("storage-note").hidden = storageOK;
 
     var path = $("path");
@@ -1261,7 +1290,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
       }
       var status = state.done[st.id] === 2 ? "perfect" : state.done[st.id] === 1 ? "done" : open.indexOf(i) >= 0 ? "open" : "locked";
       var first = status === "open" && i === open[0];
-      var row = el("div", "row" + (status === "open" ? " is-open" : "") + (first ? " has-bubble" : ""));
+      var row = el("div", "row" + (status === "open" ? " is-open" : "") + (first ? " has-bubble" : "") + (st.type === "review" ? " is-review" : ""));
       row.style.setProperty("--k", Math.sin(i * 0.9).toFixed(3));
       var btn = el("button", "node t-" + st.type + " s-" + status);
       btn.type = "button";
@@ -1271,7 +1300,12 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
       if (first) btn.appendChild(el("span", "bubble", "Los!"));
       btn.addEventListener("click", function () { onNode(i, btn); });
       row.appendChild(btn);
-      row.appendChild(el("span", "label", TYPE_LABEL[st.type]));
+      var labelText = TYPE_LABEL[st.type];
+      if (st.type === "review" && status === "open") {
+        var due = Math.min(state.review.length, REVIEW_MAX);
+        labelText += due ? " · " + due + (due === 1 ? " Wort" : " Wörter") : " · nichts offen";
+      }
+      row.appendChild(el("span", "label", labelText));
       path.appendChild(row);
       nodeButtons.push(btn);
     });
@@ -1363,15 +1397,19 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
   }
   function buildTasks(step) {
     var tasks;
+    if (step.type === "review") {
+      // die ältesten Fehlerwörter, Deutsch → Französisch; was darüber hinausgeht, wartet auf die nächste Wiederholung
+      return shuffle(state.review.slice(0, REVIEW_MAX).map(function (i) { return { kind: "speak", item: VOCAB[i], vi: i }; }));
+    }
     if (step.paris !== undefined) {
       tasks = PARIS[step.paris].map(function (item) { return { kind: "mc", item: item, pool: PARIS[step.paris] }; });
     } else {
       var idx = blockIndices(step.block);
       var mates = idx.map(function (i) { return VOCAB[i]; });
       tasks = idx.map(function (i) {
-        if (step.type === "mc") return { kind: "mc", item: VOCAB[i], mates: mates };
-        if (step.type === "speak") return { kind: "speak", item: VOCAB[i] };
-        return { kind: "cloze", item: CLOZE[i], vocab: VOCAB[i] };
+        if (step.type === "mc") return { kind: "mc", item: VOCAB[i], mates: mates, vi: i };
+        if (step.type === "speak") return { kind: "speak", item: VOCAB[i], vi: i };
+        return { kind: "cloze", item: CLOZE[i], vocab: VOCAB[i], vi: i };
       });
     }
     return shuffle(tasks);
@@ -1603,10 +1641,13 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
   var lesson = null;
   function startLesson(index) {
     var step = STEPS[index];
+    var queue = buildTasks(step);
     lesson = {
       index: index, step: step,
-      queue: buildTasks(step),
-      mastered: 0, mistakes: 0, earned: 0,
+      queue: queue,
+      isReview: step.type === "review",
+      total: step.type === "review" ? queue.length : PER_STEP,
+      mastered: 0, answered: 0, mistakes: 0, earned: 0,
       locked: false, timer: null, token: 0, current: null
     };
     show("lesson");
@@ -1621,8 +1662,10 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
   }
   function updateLessonBar() {
     if (!lesson) return;
-    $("track-fill").style.width = Math.round(lesson.mastered / PER_STEP * 100) + "%";
-    $("track").setAttribute("aria-valuenow", String(lesson.mastered));
+    var progress = lesson.isReview ? lesson.answered : lesson.mastered;
+    $("track-fill").style.width = (lesson.total ? Math.round(progress / lesson.total * 100) : 100) + "%";
+    $("track").setAttribute("aria-valuemax", String(lesson.total));
+    $("track").setAttribute("aria-valuenow", String(progress));
     $("lesson-gems").textContent = String(state.gems);
   }
   function nextTask() {
@@ -1641,6 +1684,8 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
     lesson.locked = true;
     stopSpeech();
     lesson.mastered++;
+    lesson.answered++;
+    if (lesson.isReview) listRemove(lesson.current.vi);   // gewusst: runter von der Fehlerliste
     lesson.earned += GEMS_PER_ANSWER;
     state.gems += GEMS_PER_ANSWER;
     saveState();
@@ -1653,9 +1698,24 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
     lesson.locked = true;
     stopSpeech();
     lesson.mistakes++;
-    lesson.current.retry = true;
-    lesson.queue.push(lesson.current);   // Retry-Queue: kommt am Ende des Steps wieder
+    lesson.answered++;
+    if (lesson.isReview) {
+      // In der Wiederholung gibt es keine zweite Chance: das Wort rückt ans Ende der Fehlerliste.
+      listRemove(lesson.current.vi);
+      state.review.push(lesson.current.vi);
+      sub = (sub ? sub + " · " : "") + "Kommt in der nächsten Wiederholung wieder.";
+      updateLessonBar();
+    } else {
+      lesson.current.retry = true;
+      lesson.queue.push(lesson.current);   // Retry-Queue: kommt am Ende des Steps wieder
+      if (lesson.current.vi !== undefined && state.review.indexOf(lesson.current.vi) < 0) state.review.push(lesson.current.vi);
+    }
+    saveState();
     showFeedback("bad", head, detail, sub, speakText, true);
+  }
+  function listRemove(vi) {
+    var at = state.review.indexOf(vi);
+    if (at >= 0) state.review.splice(at, 1);
   }
   function showFeedback(kind, head, detail, sub, speakText, withContinue) {
     var box = $("feedback"), inner = $("feedback-inner");
@@ -1850,14 +1910,24 @@ button:focus-visible, input:focus-visible { outline: 3px solid #1cb0f6; outline-
     var perfect = done.mistakes === 0;
     var before = state.done[done.step.id] || 0;
     state.done[done.step.id] = Math.max(before, perfect ? 2 : 1);
-    countDayForStreak();
+    if (done.total > 0) countDayForStreak();
     saveState();
     endLesson();
 
-    $("result-title").textContent = perfect ? "Fehlerfrei geschafft! ★" : "Step geschafft!";
-    $("result-text").textContent = perfect
-      ? "Alle 7 Aufgaben auf Anhieb richtig. Dafür gibt es den Goldstern."
-      : "Du hast alle 7 Aufgaben gemeistert, auch die aus der Wiederholung.";
+    var title, text;
+    if (done.isReview) {
+      var left = state.review.length;
+      var rest = left ? " Auf der Fehlerliste " + (left === 1 ? "steht noch 1 Wort" : "stehen noch " + left + " Wörter") + " für die nächste Wiederholung." : " Deine Fehlerliste ist leer.";
+      if (done.total === 0) { title = "Nichts zu wiederholen! ★"; text = "Auf deiner Fehlerliste steht kein Wort."; }
+      else if (perfect) { title = "Wiederholung fehlerfrei! ★"; text = "Alle " + done.total + " Fehlerwörter gewusst." + rest; }
+      else { title = "Wiederholung geschafft!"; text = (done.total - done.mistakes) + " von " + done.total + " gewusst." + rest; }
+    } else if (perfect) {
+      title = "Fehlerfrei geschafft! ★"; text = "Alle 7 Aufgaben auf Anhieb richtig. Dafür gibt es den Goldstern.";
+    } else {
+      title = "Step geschafft!"; text = "Du hast alle 7 Aufgaben gemeistert. Die Fehlerwörter kommen im nächsten Wiederholungsknoten noch einmal.";
+    }
+    $("result-title").textContent = title;
+    $("result-text").textContent = text;
     $("stat-gems").textContent = "+" + done.earned;
     $("stat-mistakes").textContent = String(done.mistakes);
     $("stat-streak").textContent = String(currentStreak());
